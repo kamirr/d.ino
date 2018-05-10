@@ -1,5 +1,5 @@
-cmd: dub --compiler=ldc
+cmd: dub
 
 targets:
   release:
-    cmd: dub --compiler=ldc --build=release
+    cmd: dub --build=release
