@@ -17,12 +17,13 @@ private Event[] events(RenderWindow window) {
 
 class Game {
   private RenderWindow window;
-  private Player player = new Player();
+  private Player player;
 
   static immutable float width_to_height_ratio = 4;
 
   this(uint size) {
     window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
+    player = new Player();
     player.window_height = size;
   }
 
@@ -32,10 +33,12 @@ class Game {
 
       foreach(ev; window.events)
       switch(ev.type) {
-        case Event.EventType.Closed: window.close(); break;
+        case Event.EventType.Closed:      window.close(); break;
+        case Event.EventType.KeyPressed:  player.jump(); break;
         default: break;
       }
 
+      player.update();
       window.draw(player);
 
       window.display();
