@@ -15,7 +15,7 @@ private Event[] events(RenderWindow window) {
 
 class Game {
   private RenderWindow window;
-  static float width_to_height_ratio = 4;
+  static immutable float width_to_height_ratio = 4;
 
   this(uint size) {
     window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
