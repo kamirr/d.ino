@@ -1,0 +1,12 @@
+{
+	"name": "dino",
+	"authors": [
+		"Kamill Koczurek"
+	],
+	"dependencies": {
+		"dsfml": "~>2.1.1"
+	},
+	"description": "Dino, indeed.",
+	"copyright": "Copyright © 2018, Kamill Koczurek",
+	"license": "Boost"
+}
