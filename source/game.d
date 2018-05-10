@@ -4,6 +4,15 @@ import dsfml.graphics;
 import dsfml.window;
 import dsfml.system;
 
+private Event[] events(RenderWindow window) {
+  Event[] res;
+  for(Event ev; window.pollEvent(ev);) {
+    res ~= ev;
+  }
+
+  return res;
+}
+
 class Game {
   private RenderWindow window;
   static float width_to_height_ratio = 4;
@@ -16,10 +25,10 @@ class Game {
     while(window.isOpen) {
       window.clear(Color(20, 20, 20));
 
-      for(Event ev; window.pollEvent(ev);) {
-        if(ev.type == Event.EventType.Closed) {
-          window.close();
-        }
+      foreach(ev; window.events)
+      switch(ev.type) {
+        case Event.EventType.Closed: window.close(); break;
+        default: break;
       }
 
       window.display();
