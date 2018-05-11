@@ -15,7 +15,7 @@ class Player : Drawable {
   static immutable Vector2f size = Vector2f(40, 43);
   float window_height;
 
-  float speed = 1;
+  float speed = 100;
   float height = 0;
   float vert_velocity = 0;
 
@@ -46,6 +46,8 @@ class Player : Drawable {
 
     vert_velocity -= dt * 1800;
     height += dt * vert_velocity;
+
+    speed += dt;
 
     if(height < 0) {
       height = 0;
