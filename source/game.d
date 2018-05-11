@@ -1,10 +1,15 @@
 module dino.game;
 
 import dino.player;
+import dino.barrier;
 
 import dsfml.graphics;
 import dsfml.window;
 import dsfml.system;
+
+import std.random;
+import std.datetime;
+import std.datetime.stopwatch : StopWatch;
 
 private Event[] events(RenderWindow window) {
   Event[] res;
@@ -18,13 +23,26 @@ private Event[] events(RenderWindow window) {
 class Game {
   private RenderWindow window;
   private Player player;
+  private Barrier[] barriers;
+  private float seconds_to_next_barrier = 0;
+  private StopWatch barrier_stopwatch;
 
   static immutable float width_to_height_ratio = 4;
+
+  private void barrier_generation() {
+    if(barrier_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_barrier) {
+      barriers ~= new Barrier(random_width(), random_height(), 600);
+      seconds_to_next_barrier = uniform01!float * 3 + 1;
+      barrier_stopwatch.reset();
+    }
+  }
 
   this(uint size) {
     window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
     player = new Player();
     player.window_height = size;
+
+    barrier_stopwatch.start();
   }
 
   void run() {
@@ -40,6 +58,12 @@ class Game {
 
       player.update();
       window.draw(player);
+
+      barrier_generation();
+      foreach(ref barrier; barriers) {
+        barrier.move(player.displacement);
+        window.draw(barrier);
+      }
 
       window.display();
     }
