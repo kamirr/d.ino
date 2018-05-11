@@ -4,16 +4,16 @@ import dsfml.graphics;
 
 private int toInt(Barrier.height_t h) {
   final switch(h) {
-    case Barrier.height_t.High:   return 50;
-    case Barrier.height_t.Medium: return 30;
-    case Barrier.height_t.Low:    return 30;
+    case Barrier.height_t.High:   return 47;
+    case Barrier.height_t.Medium: return 45;
+    case Barrier.height_t.Low:    return 33;
   }
 }
 private int toInt(Barrier.width_t h) {
   final switch(h) {
-    case Barrier.width_t.Wide:   return 40;
-    case Barrier.width_t.Medium: return 30;
-    case Barrier.width_t.Thin:   return 20;
+    case Barrier.width_t.Wide:   return 24;
+    case Barrier.width_t.Medium: return 25;
+    case Barrier.width_t.Thin:   return 17;
   }
 }
 
