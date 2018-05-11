@@ -3,7 +3,7 @@ module dino.player;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
-private float asSeconds(Duration d) {
+package float asSeconds(Duration d) {
   return (cast(float) d.total!"nsecs") / 1000000000;
 }
 
@@ -51,7 +51,7 @@ class Player : Drawable {
     vert_velocity -= delta_seconds * 1800;
     height += delta_seconds * vert_velocity;
 
-    speed += delta_seconds * 10;
+    speed += delta_seconds;
 
     if(height < 0) {
       height = 0;
