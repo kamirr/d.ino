@@ -11,11 +11,15 @@ import dsfml.graphics;
 import dsfml.system;
 
 class Player : Drawable {
+  private float delta_seconds = 0;
+
   static immutable float horizontal_offset = 60;
   static immutable Vector2f size = Vector2f(40, 43);
   float window_height;
 
-  float speed = 100;
+  float displacement() { return delta_seconds * speed; }
+
+  float speed = 300;
   float height = 0;
   float vert_velocity = 0;
 
@@ -40,14 +44,14 @@ class Player : Drawable {
     }
   }
   void update() {
-    float dt = _clock.peek.asSeconds;
+    delta_seconds = _clock.peek.asSeconds;
 
     _clock.reset();
 
-    vert_velocity -= dt * 1800;
-    height += dt * vert_velocity;
+    vert_velocity -= delta_seconds * 1800;
+    height += delta_seconds * vert_velocity;
 
-    speed += dt;
+    speed += delta_seconds * 10;
 
     if(height < 0) {
       height = 0;
