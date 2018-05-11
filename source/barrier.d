@@ -13,7 +13,24 @@ private int toInt(Barrier.width_t h) {
   final switch(h) {
     case Barrier.width_t.Wide:   return 40;
     case Barrier.width_t.Medium: return 30;
-    case Barrier.width_t.Low:    return 20;
+    case Barrier.width_t.Thin:   return 20;
+  }
+}
+
+package Barrier.width_t random_width() {
+  import std.random;
+  final switch(uniform!uint % 3) {
+    case 0: return Barrier.width_t.Wide;
+    case 1: return Barrier.width_t.Medium;
+    case 2: return Barrier.width_t.Thin;
+  }
+}
+package Barrier.height_t random_height() {
+  import std.random;
+  final switch(uniform!uint % 3) {
+    case 0: return Barrier.height_t.High;
+    case 1: return Barrier.height_t.Medium;
+    case 2: return Barrier.height_t.Low;
   }
 }
 
