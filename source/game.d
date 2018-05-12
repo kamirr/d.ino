@@ -31,7 +31,7 @@ class Game {
 
   private void cactus_generation() {
     if(cactus_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_cactus) {
-      cactuss ~= new Cactus(random_width(), random_height(), 600);
+      cactuss ~= random_cactus_at(600);
       seconds_to_next_cactus = uniform01!float * 2 + 1;
       cactus_stopwatch.reset();
     }
