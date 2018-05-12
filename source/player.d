@@ -13,12 +13,22 @@ import dsfml.system;
 
 /++ Class representing the dinosaur +/
 class Player : Drawable {
+  private bool crouch;
+  private StopWatch _clock;
   private float delta_seconds = 0;
 
-  static immutable float horizontal_offset = 60;     /// Distance from the left side of the window at which a player stays
-  static immutable Vector2f size = Vector2f(40, 43); /// Size of the player
-  static immutable float initial_jump_speed = 900;   /// Initial vertical speed immediately after jumping
-  static immutable float gravity = 3500;             /// Gravitational acceleration
+  /// Distance from the left side of the window at which a player stays
+  static immutable float horizontal_offset = 60;
+
+  /// Size of the standing player
+  static immutable Vector2f size_normal = Vector2f(40, 43);
+  /// Size of the crouching player
+  static immutable Vector2f size_crouching = Vector2f(50, 30);
+
+  /// Initial vertical speed immediately after jumping
+  static immutable float initial_jump_speed = 900;
+  /// Gravitational acceleration
+  static immutable float gravity = 3500;
 
   /// Height of the window in which player resides
   float window_height;
@@ -33,7 +43,10 @@ class Player : Drawable {
   /// Vertical velocity, positive means up
   float vert_velocity = 0;
 
-  private StopWatch _clock;
+  /// Effective size
+  Vector2f size() const {
+    return crouch ? size_crouching : size_normal;
+  }
 
   /// Default constructor
   this() {
@@ -53,11 +66,14 @@ class Player : Drawable {
   void jump() {
     if(height == 0) {
       vert_velocity = initial_jump_speed;
+      crouch = false;
     }
   }
 
   /// Applies gravitational acceleration, moves the player etc.
   void update() {
+    crouch = Keyboard.isKeyPressed(Keyboard.Key.Down) && height == 0;
+
     delta_seconds = _clock.peek.asSeconds;
 
     _clock.reset();
