@@ -15,6 +15,8 @@ class Player : Drawable {
 
   static immutable float horizontal_offset = 60;
   static immutable Vector2f size = Vector2f(40, 43);
+  static immutable float initial_jump_speed = 900;
+  static immutable float gravity = 3500;
   float window_height;
 
   float displacement() { return delta_seconds * speed; }
@@ -31,7 +33,7 @@ class Player : Drawable {
 
   override void draw(RenderTarget target, RenderStates states) const {
     auto rt = new RectangleShape;
-    rt.position(Vector2f(horizontal_offset, window_height - 43 - height));
+    rt.position(Vector2f(horizontal_offset, window_height - size.y - height));
     rt.size(size);
     rt.fillColor(Color.White);
 
@@ -40,7 +42,7 @@ class Player : Drawable {
 
   void jump() {
     if(height == 0) {
-      vert_velocity = 900;
+      vert_velocity = initial_jump_speed;
     }
   }
   void update() {
@@ -48,7 +50,7 @@ class Player : Drawable {
 
     _clock.reset();
 
-    vert_velocity -= delta_seconds * 3500;
+    vert_velocity -= delta_seconds * gravity;
     height += delta_seconds * vert_velocity;
 
     speed += delta_seconds;
