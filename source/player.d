@@ -1,9 +1,9 @@
-module dino.player;
+module player;
 
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
-package float asSeconds(Duration d) {
+float asSeconds(Duration d) {
   return (cast(float) d.total!"nsecs") / 1000000000;
 }
 

@@ -1,4 +1,4 @@
-module dino.cactus;
+module cactus;
 
 import dsfml.graphics;
 

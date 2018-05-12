@@ -1,7 +1,7 @@
-module dino.game;
+module game;
 
-import dino.player;
-import dino.cactus;
+import player;
+import cactus;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -20,6 +20,11 @@ private Event[] events(RenderWindow window) {
   return res;
 }
 
+/++
+ + Dino game,
+ +
+ + Creates a properly sized window and runs the whole simulation
+ +/
 class Game {
   private RenderWindow window;
   private Player player;
@@ -27,6 +32,7 @@ class Game {
   private float seconds_to_next_cactus = 0;
   private StopWatch cactus_stopwatch;
 
+  /++ Width/height ratio +/
   static immutable float width_to_height_ratio = 4;
 
   private void cactus_generation() {
@@ -46,6 +52,7 @@ class Game {
     }
   }
 
+  /++ Creates Dino game instance, size refers to height of the window +/
   this(uint size) {
     window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
     player = new Player();
@@ -54,6 +61,7 @@ class Game {
     cactus_stopwatch.start();
   }
 
+  /++ Runs the game +/
   void run() {
     while(window.isOpen) {
       window.clear(Color(20, 20, 20));

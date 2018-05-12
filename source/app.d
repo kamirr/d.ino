@@ -1,5 +1,5 @@
 import std.stdio;
-import dino.game;
+import game;
 
 void main() {
 	auto game = new Game(150);
