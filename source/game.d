@@ -1,7 +1,7 @@
 module dino.game;
 
 import dino.player;
-import dino.barrier;
+import dino.cactus;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -23,17 +23,17 @@ private Event[] events(RenderWindow window) {
 class Game {
   private RenderWindow window;
   private Player player;
-  private Barrier[] barriers;
-  private float seconds_to_next_barrier = 0;
-  private StopWatch barrier_stopwatch;
+  private Cactus[] cactuss;
+  private float seconds_to_next_cactus = 0;
+  private StopWatch cactus_stopwatch;
 
   static immutable float width_to_height_ratio = 4;
 
-  private void barrier_generation() {
-    if(barrier_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_barrier) {
-      barriers ~= new Barrier(random_width(), random_height(), 600);
-      seconds_to_next_barrier = uniform01!float * 2 + 1;
-      barrier_stopwatch.reset();
+  private void cactus_generation() {
+    if(cactus_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_cactus) {
+      cactuss ~= new Cactus(random_width(), random_height(), 600);
+      seconds_to_next_cactus = uniform01!float * 2 + 1;
+      cactus_stopwatch.reset();
     }
   }
 
@@ -51,7 +51,7 @@ class Game {
     player = new Player();
     player.window_height = size;
 
-    barrier_stopwatch.start();
+    cactus_stopwatch.start();
   }
 
   void run() {
@@ -68,10 +68,10 @@ class Game {
       player.update();
       window.draw(player);
 
-      barrier_generation();
-      foreach(ref barrier; barriers) {
-        barrier.move(player.displacement);
-        window.draw(barrier);
+      cactus_generation();
+      foreach(ref cactus; cactuss) {
+        cactus.move(player.displacement);
+        window.draw(cactus);
       }
 
       window.display();

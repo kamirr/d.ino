@@ -1,40 +1,40 @@
-module dino.barrier;
+module dino.cactus;
 
 import dsfml.graphics;
 
-private int toInt(Barrier.height_t h) {
+private int toInt(Cactus.height_t h) {
   final switch(h) {
-    case Barrier.height_t.High:   return 47;
-    case Barrier.height_t.Medium: return 45;
-    case Barrier.height_t.Low:    return 33;
+    case Cactus.height_t.High:   return 47;
+    case Cactus.height_t.Medium: return 45;
+    case Cactus.height_t.Low:    return 33;
   }
 }
-private int toInt(Barrier.width_t h) {
+private int toInt(Cactus.width_t h) {
   final switch(h) {
-    case Barrier.width_t.Wide:   return 24;
-    case Barrier.width_t.Medium: return 25;
-    case Barrier.width_t.Thin:   return 17;
+    case Cactus.width_t.Wide:   return 24;
+    case Cactus.width_t.Medium: return 25;
+    case Cactus.width_t.Thin:   return 17;
   }
 }
 
-package Barrier.width_t random_width() {
+package Cactus.width_t random_width() {
   import std.random;
   final switch(uniform!uint % 3) {
-    case 0: return Barrier.width_t.Wide;
-    case 1: return Barrier.width_t.Medium;
-    case 2: return Barrier.width_t.Thin;
+    case 0: return Cactus.width_t.Wide;
+    case 1: return Cactus.width_t.Medium;
+    case 2: return Cactus.width_t.Thin;
   }
 }
-package Barrier.height_t random_height() {
+package Cactus.height_t random_height() {
   import std.random;
   final switch(uniform!uint % 3) {
-    case 0: return Barrier.height_t.High;
-    case 1: return Barrier.height_t.Medium;
-    case 2: return Barrier.height_t.Low;
+    case 0: return Cactus.height_t.High;
+    case 1: return Cactus.height_t.Medium;
+    case 2: return Cactus.height_t.Low;
   }
 }
 
-class Barrier : Drawable {
+class Cactus : Drawable {
   enum height_t { High, Medium, Low };
   enum width_t { Wide, Medium, Thin };
 
