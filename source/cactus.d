@@ -10,12 +10,27 @@ private float asInt(Cactus.Width w) {
   }
 }
 
+private Texture texFromFile(const string filename) {
+  auto res = new Texture;
+  res.loadFromFile(filename);
+  res.setRepeated(true);
+  return res;
+}
+
 /// Size of a small cactus
 static immutable small_cactus_size = Vector2f(17, 33);
 /// Size of a medium cactus
 static immutable medium_cactus_size = Vector2f(25, 45);
 /// Size of a big cactus
-static immutable big_cactus_size = Vector2f(24, 47);
+static immutable big_cactus_size = Vector2f(24, 46);
+
+private Texture[string] textures;
+
+static this() {
+  textures["small_cactus"]  = texFromFile("assets/cactus1.png");
+  textures["medium_cactus"] = texFromFile("assets/cactus2.png");
+  textures["big_cactus"]   = texFromFile("assets/cactus3.png");
+}
 
 /// Get size of a cactus of given type
 Vector2f cactus_size(const Cactus c) {
@@ -25,7 +40,7 @@ Vector2f cactus_size(const Cactus c) {
     case Cactus.Type.Medium: res = medium_cactus_size; break;
     case Cactus.Type.Big:    res = big_cactus_size;    break;
   }
-  res.x *= c.width.asInt;
+  //res.x *= c.width.asInt;
   return res;
 }
 
@@ -48,12 +63,27 @@ class Cactus : Drawable {
   /// Width of the cactus
   Width width;
 
+  /// Texture of the cactus
+  Texture texture() const {
+    final switch(type) {
+      case Type.Small:  return textures["small_cactus"];
+      case Type.Medium: return textures["medium_cactus"];
+      case Type.Big:    return textures["big_cactus"];
+    }
+  }
+
   override void draw(RenderTarget window, RenderStates states) const {
     RectangleShape s = new RectangleShape;
     s.position(Vector2f(horizontal_offset, window.getSize.y - cactus_size(this).y));
     s.size(cactus_size(this));
-    s.fillColor(Color(255, 0, 0));
+    s.setTexture(texture);
+    s.fillColor(Color(255, 255, 255));
+
     window.draw(s);
+    foreach(i; 1..width.asInt) {
+      s.move(Vector2f(cactus_size(this).x, 0));
+      window.draw(s);
+    }
   }
 
   /// Constructs a cactus with given type and position
