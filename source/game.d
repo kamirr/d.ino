@@ -32,7 +32,7 @@ class Game {
   private void barrier_generation() {
     if(barrier_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_barrier) {
       barriers ~= new Barrier(random_width(), random_height(), 600);
-      seconds_to_next_barrier = uniform01!float * 3 + 1;
+      seconds_to_next_barrier = uniform01!float * 2 + 1;
       barrier_stopwatch.reset();
     }
   }
