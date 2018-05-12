@@ -3,19 +3,35 @@ module player;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
+private Texture texFromFile(const string filename) {
+  auto res = new Texture;
+  res.loadFromFile(filename);
+  return res;
+}
+
 /++ Converts Duration to a number of seconds +/
 float asSeconds(Duration d) {
   return (cast(float) d.total!"nsecs") / 1_000_000_000;
 }
 
 import dsfml.graphics;
-import dsfml.system;
+
+private static Texture[string] textures;
+
+static this() {
+  textures["crouch"] = texFromFile("assets/dino_crouch.png");
+  textures["jump"] = texFromFile("assets/dino_jump.png");
+  textures["step1"] = texFromFile("assets/dino1.png");
+  textures["step2"] = texFromFile("assets/dino2.png");
+}
 
 /++ Class representing the dinosaur +/
 class Player : Drawable {
   private bool crouch;
   private StopWatch _clock;
   private float delta_seconds = 0;
+  private StopWatch leg_swap_clock;
+  private bool leg;
 
   /// Distance from the left side of the window at which a player stays
   static immutable float horizontal_offset = 60;
@@ -48,9 +64,22 @@ class Player : Drawable {
     return crouch ? size_crouching : size_normal;
   }
 
+  /// Current texture
+  const(Texture) texture() const {
+    if(crouch) {
+      return textures["crouch"];
+    }
+    if(height > 0) {
+      return textures["jump"];
+    }
+
+    return textures[leg ? "step1" : "step2"];
+  }
+
   /// Default constructor
   this() {
     _clock.start();
+    leg_swap_clock.start();
   }
 
   override void draw(RenderTarget target, RenderStates states) const {
@@ -58,6 +87,7 @@ class Player : Drawable {
     rt.position(Vector2f(horizontal_offset, window_height - size.y - height));
     rt.size(size);
     rt.fillColor(Color.White);
+    rt.setTexture(texture);
 
     target.draw(rt, states);
   }
@@ -86,6 +116,10 @@ class Player : Drawable {
     if(height < 0) {
       height = 0;
       vert_velocity = 0;
+    }
+    if(leg_swap_clock.peek.asSeconds > 0.08f) {
+      leg = !leg;
+      leg_swap_clock.reset();
     }
   }
 }
