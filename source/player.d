@@ -19,7 +19,8 @@ import dsfml.graphics;
 private static Texture[string] textures;
 
 static this() {
-  textures["crouch"] = texFromFile("assets/dino_crouch.png");
+  textures["crouch1"] = texFromFile("assets/dino_crouch1.png");
+  textures["crouch2"] = texFromFile("assets/dino_crouch2.png");
   textures["jump"] = texFromFile("assets/dino_jump.png");
   textures["step1"] = texFromFile("assets/dino1.png");
   textures["step2"] = texFromFile("assets/dino2.png");
@@ -66,11 +67,11 @@ class Player : Drawable {
 
   /// Current texture
   const(Texture) texture() const {
-    if(crouch) {
-      return textures["crouch"];
-    }
     if(height > 0) {
       return textures["jump"];
+    }
+    if(crouch) {
+      return textures[leg ? "crouch1" : "crouch2"];
     }
 
     return textures[leg ? "step1" : "step2"];
