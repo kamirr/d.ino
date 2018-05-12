@@ -23,12 +23,12 @@ class Player : Drawable {
   /// Size of the standing player
   static immutable Vector2f size_normal = Vector2f(40, 43);
   /// Size of the crouching player
-  static immutable Vector2f size_crouching = Vector2f(50, 30);
+  static immutable Vector2f size_crouching = Vector2f(55, 26);
 
   /// Initial vertical speed immediately after jumping
-  static immutable float initial_jump_speed = 900;
+  static immutable float initial_jump_speed = 800;
   /// Gravitational acceleration
-  static immutable float gravity = 3500;
+  static immutable float gravity = 3000;
 
   /// Height of the window in which player resides
   float window_height;
@@ -37,7 +37,7 @@ class Player : Drawable {
   float displacement() { return delta_seconds * speed; }
 
   /// Speed at which the player moves to the right
-  float speed = 500;
+  float speed = 450;
   /// Distance from the ground
   float height = 0;
   /// Vertical velocity, positive means up
