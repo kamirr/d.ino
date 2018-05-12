@@ -19,7 +19,7 @@ class Player : Drawable {
 
   float displacement() { return delta_seconds * speed; }
 
-  float speed = 300;
+  float speed = 500;
   float height = 0;
   float vert_velocity = 0;
 
@@ -40,7 +40,7 @@ class Player : Drawable {
 
   void jump() {
     if(height == 0) {
-      vert_velocity = 600;
+      vert_velocity = 900;
     }
   }
   void update() {
@@ -48,7 +48,7 @@ class Player : Drawable {
 
     _clock.reset();
 
-    vert_velocity -= delta_seconds * 1800;
+    vert_velocity -= delta_seconds * 3500;
     height += delta_seconds * vert_velocity;
 
     speed += delta_seconds;
