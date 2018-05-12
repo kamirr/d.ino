@@ -52,7 +52,7 @@ class Cactus : Drawable {
     RectangleShape s = new RectangleShape;
     s.position(Vector2f(horizontal_offset, window.getSize.y - cactus_size(this).y));
     s.size(cactus_size(this));
-    s.fillColor(Color(255, 255, 255));
+    s.fillColor(Color(255, 0, 0));
     window.draw(s);
   }
 
