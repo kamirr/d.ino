@@ -1,5 +1,9 @@
-cmd: dub
+cmd: dub build
 
 targets:
   release:
-    cmd: dub --build=release
+    cmd: dub build --build=release
+  run debug:
+    cmd: dub run
+  run release:
+    cmd: dub run --build=release
