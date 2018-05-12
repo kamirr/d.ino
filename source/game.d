@@ -55,6 +55,8 @@ class Game {
   /++ Creates Dino game instance, size refers to height of the window +/
   this(uint size) {
     window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
+    window.setVerticalSyncEnabled(true);
+
     player = new Player();
     player.window_height = size;
 
