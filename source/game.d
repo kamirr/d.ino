@@ -37,6 +37,15 @@ class Game {
     }
   }
 
+  private void on_key_pressed(Keyboard.Key code) {
+    if(code == Keyboard.Key.Space || code == Keyboard.Key.Up) {
+      player.jump();
+    }
+    if(code == Keyboard.Key.Down && player.vert_velocity > 0) {
+      player.vert_velocity = 0;
+    }
+  }
+
   this(uint size) {
     window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
     player = new Player();
@@ -51,8 +60,8 @@ class Game {
 
       foreach(ev; window.events)
       switch(ev.type) {
-        case Event.EventType.Closed:      window.close(); break;
-        case Event.EventType.KeyPressed:  player.jump(); break;
+        case Event.EventType.Closed:     window.close();              break;
+        case Event.EventType.KeyPressed: on_key_pressed(ev.key.code); break;
         default: break;
       }
 
