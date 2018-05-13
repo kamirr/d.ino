@@ -95,11 +95,13 @@ class Player : Drawable, Collidable {
   }
 
   /// Attempts to jump
-  void jump() {
+  bool jump() {
     if(height == 0) {
       vert_velocity = initial_jump_speed;
       crouch = false;
+      return true;
     }
+    return false;
   }
 
   /// Applies gravitational acceleration, moves the player etc.
