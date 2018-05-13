@@ -64,6 +64,9 @@ class Cactus : Drawable, Collidable {
   /// Width of the cactus
   Width width;
 
+  /// Height of the game window
+  float window_height;
+
   /// Texture of the cactus
   Texture texture() const {
     final switch(type) {
@@ -99,13 +102,13 @@ class Cactus : Drawable, Collidable {
     horizontal_offset -= distance;
   }
 
-  FloatRect collider(const RenderTarget window) const {
-    return FloatRect(horizontal_offset, window.getSize.y - cactus_size(this).y, cactus_size(this).x, cactus_size(this).y);
+  FloatRect collider(const RenderTarget) const {
+    return FloatRect(horizontal_offset, window_height - cactus_size(this).y, cactus_size(this).x, cactus_size(this).y);
   }
 }
 
 /// Creates a randomly prepared cactus
-Cactus random_cactus_at(float horizontal_offset) {
+Cactus random_cactus_at(float horizontal_offset, uint window_height) {
   import std.random : uniform;
 
   Cactus.Type t;
@@ -121,5 +124,7 @@ Cactus random_cactus_at(float horizontal_offset) {
     case 2: w = Cactus.Width.Wide;   break;
   }
 
-  return new Cactus(t, w, horizontal_offset);
+  auto res = new Cactus(t, w, horizontal_offset);
+  res.window_height = window_height;
+  return res;
 }
