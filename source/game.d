@@ -7,6 +7,7 @@ import ground;
 import dsfml.graphics;
 import dsfml.window;
 import dsfml.system;
+import dsfml.audio;
 
 import std.random;
 import std.datetime;
@@ -19,6 +20,17 @@ private Event[] events(RenderWindow window) {
   }
 
   return res;
+}
+
+private SoundBuffer bufFromFile(string path) {
+  auto res = new SoundBuffer;
+  res.loadFromFile(path);
+  return res;
+}
+
+private static SoundBuffer[string] buffers;
+static this() {
+  buffers["button"] = bufFromFile("assets/sound_button.mp3");
 }
 
 /++
@@ -34,6 +46,8 @@ class Game {
   private float seconds_to_next_cactus = 0;
   private StopWatch cactus_stopwatch;
 
+  private Sound button_sound;
+
   /++ Width/height ratio +/
   static immutable float width_to_height_ratio = 4;
 
@@ -47,7 +61,10 @@ class Game {
 
   private void on_key_pressed(Keyboard.Key code) {
     if(code == Keyboard.Key.Space || code == Keyboard.Key.Up) {
-      player.jump();
+      const jumped = player.jump();
+      if(jumped && button_sound.status != Sound.Status.Playing) {
+        button_sound.play();
+      }
     }
     if(code == Keyboard.Key.Down && player.vert_velocity > 0) {
       player.vert_velocity = 0;
@@ -65,6 +82,9 @@ class Game {
     cactus_stopwatch.start();
 
     ground = new Ground();
+
+    button_sound = new Sound;
+    button_sound.setBuffer(buffers["button"]);
   }
 
   /++ Runs the game +/
