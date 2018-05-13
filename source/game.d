@@ -2,6 +2,7 @@ module game;
 
 import player;
 import cactus;
+import ground;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -28,6 +29,7 @@ private Event[] events(RenderWindow window) {
 class Game {
   private RenderWindow window;
   private Player player;
+  private Ground ground;
   private Cactus[] cactuss;
   private float seconds_to_next_cactus = 0;
   private StopWatch cactus_stopwatch;
@@ -61,6 +63,8 @@ class Game {
     player.window_height = size;
 
     cactus_stopwatch.start();
+
+    ground = new Ground();
   }
 
   /++ Runs the game +/
@@ -74,6 +78,9 @@ class Game {
         case Event.EventType.KeyPressed: on_key_pressed(ev.key.code); break;
         default: break;
       }
+
+      ground.move(player.displacement);
+      window.draw(ground);
 
       player.update();
       window.draw(player);
