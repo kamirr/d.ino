@@ -80,6 +80,10 @@ class Game {
 
       cactus_generation();
       foreach(ref cactus; cactuss) {
+        if(player.collider(window).intersects(cactus.collider(window))) {
+          window.close;
+        }
+
         cactus.move(player.displacement);
         window.draw(cactus);
       }
