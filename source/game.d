@@ -80,7 +80,7 @@ class Game {
 
       cactus_generation();
       foreach(ref cactus; cactuss) {
-        if(player.collider(window).intersects(cactus.collider(window))) {
+        if(player.collider.intersects(cactus.collider)) {
           window.close;
         }
 

@@ -125,7 +125,7 @@ class Player : Drawable, Collidable {
     }
   }
 
-  FloatRect collider(const RenderTarget) const {
+  FloatRect collider() const {
     return FloatRect(horizontal_offset, window_height - size.y - height, size.x, size.y);
   }
 }
