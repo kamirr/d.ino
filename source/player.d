@@ -44,8 +44,8 @@ class Player : Drawable, Collidable {
   static immutable Vector2f size_crouching = Vector2f(55, 26);
 
   /// Initial vertical speed immediately after jumping
-  static immutable float initial_jump_speed = 800;
-  /// Gravitational acceleration
+  static immutable float initial_jump_speed = 750;
+  /// Gravitational acceleratio
   static immutable float gravity = 3000;
 
   /// Height of the window in which player resides
