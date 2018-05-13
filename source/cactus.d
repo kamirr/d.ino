@@ -2,6 +2,7 @@ module cactus;
 
 import dsfml.graphics;
 import collidable;
+import collider;
 
 private float asInt(Cactus.Width w) {
   final switch(w) {
@@ -103,13 +104,9 @@ class Cactus : Drawable, Collidable {
   }
 
   /// Returns collider of the cactus
-  FloatRect collider() const {
-    return FloatRect(
-      horizontal_offset,
-      window_height - cactus_size(this).y,
-      cactus_size(this).x * width.asInt,
-      cactus_size(this).y
-    );
+  Collider collider() const {
+		auto c = new Collider(texture);
+		return c.translate(Vector2f(horizontal_offset, window_height - cactus_size(this).y));
   }
 }
 
