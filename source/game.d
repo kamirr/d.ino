@@ -70,7 +70,7 @@ class Game {
   /++ Runs the game +/
   void run() {
     while(window.isOpen) {
-      window.clear(Color(255, 255, 255));
+      window.clear(Color(247, 247, 247));
 
       foreach(ev; window.events)
       switch(ev.type) {
