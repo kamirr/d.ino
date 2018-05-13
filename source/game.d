@@ -89,33 +89,43 @@ class Game {
 
   /++ Runs the game +/
   void run() {
-    while(window.isOpen) {
+    bool close;
+    while(!close) {
       window.clear(Color(247, 247, 247));
 
       foreach(ev; window.events)
       switch(ev.type) {
-        case Event.EventType.Closed:     window.close();              break;
+        case Event.EventType.Closed:     close = true;                break;
         case Event.EventType.KeyPressed: on_key_pressed(ev.key.code); break;
         default: break;
       }
 
-      ground.move(player.displacement);
-      window.draw(ground);
+      /* Update simulation */
+      cactus_generation();
 
       player.update();
-      window.draw(player);
-
-      cactus_generation();
-      foreach(ref cactus; cactuss) {
-        if(player.collider.intersects(cactus.collider)) {
-          window.close;
-        }
-
+      ground.move(player.displacement);
+      foreach(cactus; cactuss) {
         cactus.move(player.displacement);
+        if(player.collider.intersects(cactus.collider)) {
+          close = true;
+        }
+      }
+
+      /* Draw stuff */
+      window.draw(ground);
+      window.draw(player);
+      foreach(ref cactus; cactuss) {
         window.draw(cactus);
       }
 
       window.display();
     }
+
+    /* Wait two seconds after the game ends */
+    auto sw = new StopWatch;
+    sw.start;
+    while(sw.peek.asSeconds < 2) {}
+    window.close();
   }
 }
