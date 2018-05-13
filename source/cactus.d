@@ -104,7 +104,12 @@ class Cactus : Drawable, Collidable {
 
   /// Returns collider of the cactus
   FloatRect collider() const {
-    return FloatRect(horizontal_offset, window_height - cactus_size(this).y, cactus_size(this).x, cactus_size(this).y);
+    return FloatRect(
+      horizontal_offset,
+      window_height - cactus_size(this).y,
+      cactus_size(this).x * width.asInt,
+      cactus_size(this).y
+    );
   }
 }
 
