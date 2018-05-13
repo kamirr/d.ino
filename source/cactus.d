@@ -1,6 +1,7 @@
 module cactus;
 
 import dsfml.graphics;
+import collidable;
 
 private float asInt(Cactus.Width w) {
   final switch(w) {
@@ -45,7 +46,7 @@ Vector2f cactus_size(const Cactus c) {
 }
 
 /// Cactus class
-class Cactus : Drawable {
+class Cactus : Drawable, Collidable {
   /// Represents type of a cactus
   enum Type {
     Small, Medium, Big
@@ -96,6 +97,10 @@ class Cactus : Drawable {
   /// Moves a cactus by a given distance
   void move(float distance) {
     horizontal_offset -= distance;
+  }
+
+  FloatRect collider(const RenderTarget window) const {
+    return FloatRect(horizontal_offset, window.getSize.y - cactus_size(this).y, cactus_size(this).x, cactus_size(this).y);
   }
 }
 

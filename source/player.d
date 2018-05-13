@@ -3,6 +3,9 @@ module player;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
+import dsfml.graphics;
+import collidable;
+
 private Texture texFromFile(const string filename) {
   auto res = new Texture;
   res.loadFromFile(filename);
@@ -13,8 +16,6 @@ private Texture texFromFile(const string filename) {
 float asSeconds(Duration d) {
   return (cast(float) d.total!"nsecs") / 1_000_000_000;
 }
-
-import dsfml.graphics;
 
 private static Texture[string] textures;
 
@@ -27,7 +28,7 @@ static this() {
 }
 
 /++ Class representing the dinosaur +/
-class Player : Drawable {
+class Player : Drawable, Collidable {
   private bool crouch;
   private StopWatch _clock;
   private float delta_seconds = 0;
@@ -122,5 +123,9 @@ class Player : Drawable {
       leg = !leg;
       leg_swap_clock.reset();
     }
+  }
+
+  FloatRect collider(const RenderTarget window) const {
+    return FloatRect(horizontal_offset, window.getSize.y - size.y - height, size.x, size.y);
   }
 }
