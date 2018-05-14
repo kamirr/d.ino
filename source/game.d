@@ -126,13 +126,21 @@ class Game {
       auto s = new Sprite(tex);
 
       bool endscreen = true;
+      bool key_released, key_pressed;
+      if(!Keyboard.isKeyPressed(Keyboard.Key.Space) && !Keyboard.isKeyPressed(Keyboard.Key.Down)) {
+        key_released = true;
+      }
       while(endscreen) {
         foreach(ev; window.events) {
           switch(ev.type) {
-            case Event.EventType.Closed:     window.close(); endscreen = false; break;
-            case Event.EventType.KeyPressed: endscreen = false;                 break;
+            case Event.EventType.Closed:      window.close(); endscreen = false; break;
+            case Event.EventType.KeyReleased: key_released = true;               break;
+            case Event.EventType.KeyPressed:  key_pressed = key_released;        break;
             default: break;
           }
+        }
+        if(key_pressed && key_released) {
+          endscreen = false;
         }
 
         window.draw(s);
