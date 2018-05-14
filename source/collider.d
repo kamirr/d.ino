@@ -7,6 +7,10 @@ import dsfml.graphics;
 class Collider : Drawable {
 	static draw_colliders = false;
 
+  private FloatRect[] rects;
+  private FloatRect bounds;
+  private float initial_tex_width = 0;
+
 	override void draw(RenderTarget target, RenderStates states) {
 		if(!draw_colliders) {
 			return;
@@ -25,11 +29,6 @@ class Collider : Drawable {
 		rs.fillColor(Color(255, 0, 0, 127));
 		target.draw(rs);
 	}
-
-  /// An array of rectangles that compose the collider
-	private FloatRect[] rects;
-	private FloatRect bounds;
-  private float initial_tex_width = 0;
 
   /// Returns true if two colliders intersect
   bool intersects(const Collider other) const {
