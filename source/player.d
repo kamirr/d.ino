@@ -86,7 +86,7 @@ class Player : Drawable, Collidable {
 
   /// Effective size
   Vector2f size() const {
-    return crouch ? size_crouching : size_normal;
+    return (crouch && !dead) ? size_crouching : size_normal;
   }
 
   /// Current texture
