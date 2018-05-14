@@ -24,11 +24,15 @@ private static Collider[string] colliders;
 static this() {
   textures["crouch1"] = texFromFile("assets/dino_crouch1.png");
   textures["crouch2"] = texFromFile("assets/dino_crouch2.png");
-  textures["jump"] = texFromFile("assets/dino_jump.png");
-  textures["step1"] = texFromFile("assets/dino1.png");
-  textures["step2"] = texFromFile("assets/dino2.png");
+  textures["jump"]    = texFromFile("assets/dino_jump.png");
+  textures["step1"]   = texFromFile("assets/dino1.png");
+  textures["step2"]   = texFromFile("assets/dino2.png");
 
-	colliders["step1"] = new Collider(textures["step1"]);
+  colliders["crouch1"] = new Collider(textures["crouch1"]);
+  colliders["crouch2"] = new Collider(textures["crouch2"]);
+  colliders["jump"]    = new Collider(textures["jump"]);
+  colliders["step1"]   = new Collider(textures["step1"]);
+  colliders["step2"]   = new Collider(textures["step2"]);
 }
 
 /++ Class representing the dinosaur +/
@@ -65,6 +69,17 @@ class Player : Drawable, Collidable {
   /// Vertical velocity, positive means up
   float vert_velocity = 0;
 
+  private string texture_name() const {
+    if(height > 0) {
+      return "jump";
+    }
+    if(crouch) {
+      return leg ? "crouch1" : "crouch2";
+    }
+
+    return leg ? "step1" : "step2";
+  }
+
   /// Default constructor
   this() {
     _clock.start();
@@ -78,14 +93,7 @@ class Player : Drawable, Collidable {
 
   /// Current texture
   const(Texture) texture() const {
-    if(height > 0) {
-      return textures["jump"];
-    }
-    if(crouch) {
-      return textures[leg ? "crouch1" : "crouch2"];
-    }
-
-    return textures[leg ? "step1" : "step2"];
+    return textures[texture_name];
   }
 
   /// Position of the player
@@ -140,6 +148,6 @@ class Player : Drawable, Collidable {
 
   /// Returns collider of the player
   Collider collider() const {
-		return colliders["step1"].translate(position);
+		return colliders[texture_name].translate(position);
   }
 }
