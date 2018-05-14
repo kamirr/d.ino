@@ -25,6 +25,14 @@ Event[] events(RenderWindow window) {
   return res;
 }
 
+/// Takes a sreenshot from a given window
+const(Texture) screenshot(RenderWindow window) {
+  auto t = new Texture;
+  t.create(window.size.x, window.size.y);
+  t.updateFromWindow(window, 0, 0);
+  return t;
+}
+
 /// Creates a sound buffer and loads its contents from file
 SoundBuffer bufFromFile(string path) {
   auto res = new SoundBuffer;
