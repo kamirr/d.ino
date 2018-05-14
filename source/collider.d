@@ -17,7 +17,6 @@ class Collider : Drawable {
     if(delayed_translation == optional.none) {
       return;
     }
-
     immutable vec = delayed_translation.or(Vector2f(0, 0));
 
     foreach(ref r; rects) {
@@ -31,11 +30,24 @@ class Collider : Drawable {
   this(const Texture tex) {
 		bounds = FloatRect(0, 0, tex.getSize.x, tex.getSize.y);
     auto image = tex.copyToImage;
-    foreach(x; 0..image.getSize.x)
-    foreach(y; 0..image.getSize.y) {
-      immutable color = image.getPixel(x, y);
-      if(color.a > 127 && color != Color(247, 247, 247)) {
-        rects ~= FloatRect(x, y, 1, 1);
+    foreach(x; 0..image.getSize.x) {
+      auto fr = FloatRect(x, 0, 1, 0);
+
+      foreach(y; 0..image.getSize.y) {
+        immutable color = image.getPixel(x, y);
+        immutable ok = color.a > 127 && color != Color(247, 247, 247);
+
+        if(ok) {
+          fr.height += 1;
+        } else {
+          if(fr.height != 0) {
+            rects ~= fr;
+          }
+          fr = FloatRect(x, y, 1, 0);
+        }
+      }
+      if(fr.height != 0) {
+        rects ~= fr;
       }
     }
 
