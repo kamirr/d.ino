@@ -1,5 +1,6 @@
 module collider;
 
+import std.algorithm;
 import dsfml.graphics;
 
 /// Represents a collider composed of multiple rectangles
@@ -28,6 +29,7 @@ class Collider : Drawable {
   /// An array of rectangles that compose the collider
 	private FloatRect[] rects;
 	private FloatRect bounds;
+  private float initial_tex_width = 0;
 
   /// Returns true if two colliders intersect
   bool intersects(const Collider other) const {
@@ -55,10 +57,12 @@ class Collider : Drawable {
         rects ~= FloatRect(x, y, 1, 1);
       }
     }
+
+    initial_tex_width = tex.getSize.x;
   }
 
   /// Initializes an empty collider
-  this() { }
+  private this() { }
 
   /// Returns a collider translated by the given vector
   Collider translate(const Vector2f vec) const {
@@ -71,6 +75,7 @@ class Collider : Drawable {
 		c.bounds = bounds;
 		c.bounds.top += vec.y;
 		c.bounds.left += vec.x;
+    c.initial_tex_width = initial_tex_width;
 
     return c;
   }
@@ -86,11 +91,26 @@ class Collider : Drawable {
 		if(bounds.top > other.bounds.top) {
 			bounds.top = other.bounds.top;
 		}
-		if(bounds.left + width < other.bounds.left + other.bounds.width) {
-			width = other.bounds.left - bounds.left + other.bounds.width;
+		if(bounds.left + bounds.width < other.bounds.left + other.bounds.width) {
+			bounds.width = other.bounds.left - bounds.left + other.bounds.width;
 		}
-		if(bounds.top + width < other.bounds.top + other.bounds.height) {
-			width = other.bounds.top - bounds.top + other.bounds.height;
+		if(bounds.top + bounds.height < other.bounds.top + other.bounds.height) {
+			bounds.height = other.bounds.top - bounds.top + other.bounds.height;
 		}
+
+    initial_tex_width = max(initial_tex_width, other.initial_tex_width);
 	}
+
+  // Replicates a collider horizontally
+  Collider replicate(uint times) const {
+    Collider c = new Collider;
+
+    foreach(i; 0..times) {
+      c.merge(translate(Vector2f(i * initial_tex_width, 0)));
+    }
+
+    c.initial_tex_width = initial_tex_width * times;
+
+    return c;
+  }
 }
