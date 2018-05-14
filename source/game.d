@@ -117,10 +117,10 @@ class Game {
 
       /* Draw stuff */
       window.draw(ground);
-      window.draw(player);
       foreach(ref cactus; cactuses) {
         window.draw(cactus);
       }
+      window.draw(player);
 
       window.display();
     }
