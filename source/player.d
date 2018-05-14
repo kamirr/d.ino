@@ -65,6 +65,12 @@ class Player : Drawable, Collidable {
   /// Vertical velocity, positive means up
   float vert_velocity = 0;
 
+  /// Default constructor
+  this() {
+    _clock.start();
+    leg_swap_clock.start();
+  }
+
   /// Effective size
   Vector2f size() const {
     return crouch ? size_crouching : size_normal;
@@ -82,15 +88,14 @@ class Player : Drawable, Collidable {
     return textures[leg ? "step1" : "step2"];
   }
 
-  /// Default constructor
-  this() {
-    _clock.start();
-    leg_swap_clock.start();
+  /// Position of the player
+  Vector2f position() const {
+    return Vector2f(horizontal_offset, window_height - size.y - height);
   }
 
   override void draw(RenderTarget target, RenderStates states) const {
     auto rt = new RectangleShape;
-    rt.position(Vector2f(horizontal_offset, window_height - size.y - height));
+    rt.position(position);
     rt.size(size);
     rt.fillColor(Color.White);
     rt.setTexture(texture);
@@ -135,6 +140,6 @@ class Player : Drawable, Collidable {
 
   /// Returns collider of the player
   Collider collider() const {
-		return colliders["step1"].translate(Vector2f(horizontal_offset, window_height - size.y - height));
+		return colliders["step1"].translate(position);
   }
 }
