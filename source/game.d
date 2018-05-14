@@ -39,9 +39,9 @@ class Game {
   static immutable float width_to_height_ratio = 4;
 
   private void cactus_generation() {
-    if(cactus_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_cactus) {
+    if(cactus_stopwatch.peek.asSeconds > seconds_to_next_cactus) {
       cactuses ~= random_cactus_at(600, window.getSize.y);
-      seconds_to_next_cactus = uniform01!float * 2 + 1;
+      seconds_to_next_cactus = uniform01!float * 1.5 + .5;
       cactus_stopwatch.reset();
     }
   }

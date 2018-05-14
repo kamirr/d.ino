@@ -120,7 +120,7 @@ class Player : Drawable, Collidable {
     vert_velocity -= delta_seconds * gravity;
     height += delta_seconds * vert_velocity;
 
-    speed += delta_seconds;
+    speed += delta_seconds * 6;
 
     if(height < 0) {
       height = 0;
