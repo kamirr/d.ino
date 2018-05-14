@@ -34,7 +34,7 @@ static this() {
   colliders["jump"]    = new Collider(textures["jump"]);
   colliders["step1"]   = new Collider(textures["step1"]);
   colliders["step2"]   = new Collider(textures["step2"]);
-  colliders["dead"]   = new Collider(textures["dead"]);
+  colliders["dead"]    = new Collider(textures["dead"]);
 }
 
 /// Class representing the dinosaur
