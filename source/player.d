@@ -35,12 +35,12 @@ static this() {
   colliders["step2"]   = new Collider(textures["step2"]);
 }
 
-/++ Class representing the dinosaur +/
+/// Class representing the dinosaur
 class Player : Drawable, Collidable {
-  private bool crouch;
-  private StopWatch _clock;
-  private float delta_seconds = 0;
+  private StopWatch delta_time_clock;
   private StopWatch leg_swap_clock;
+  private float delta_seconds = 0;
+  private bool crouch;
   private bool leg;
 
   /// Distance from the left side of the window at which a player stays
@@ -82,7 +82,7 @@ class Player : Drawable, Collidable {
 
   /// Default constructor
   this() {
-    _clock.start();
+    delta_time_clock.start();
     leg_swap_clock.start();
   }
 
@@ -115,9 +115,9 @@ class Player : Drawable, Collidable {
   void update() {
     crouch = Keyboard.isKeyPressed(Keyboard.Key.Down) && height == 0;
 
-    delta_seconds = _clock.peek.asSeconds;
+    delta_seconds = delta_time_clock.peek.asSeconds;
 
-    _clock.reset();
+    delta_time_clock.reset();
 
     vert_velocity -= delta_seconds * gravity;
     height += delta_seconds * vert_velocity;
