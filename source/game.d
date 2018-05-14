@@ -18,6 +18,7 @@ import std.datetime.stopwatch : StopWatch;
 private static SoundBuffer[string] buffers;
 static this() {
   buffers["button"] = bufFromFile("assets/sound_button.mp3");
+  buffers["hit"] = bufFromFile("assets/sound_hit.mp3");
 }
 
 /++
@@ -34,6 +35,7 @@ class Game {
   private StopWatch cactus_stopwatch;
 
   private Sound button_sound;
+  private Sound hit_sound;
 
   /++ Width/height ratio +/
   static immutable float width_to_height_ratio = 4;
@@ -72,17 +74,18 @@ class Game {
 
       /* Update simulation */
       cactus_generation();
-
-      player.update();
-      ground.move(player.displacement);
-      foreach(i; 0..cactuses.length) {
-				auto cactus = cactuses[i];
-				cactus.move(player.displacement);
+      foreach(cactus; cactuses) {
         if(player.collider.intersects(cactus.collider)) {
           close = true;
           player.dead = true;
         }
       }
+
+      player.update();
+      foreach(cactus; cactuses) {
+        cactus.move(player.displacement);
+      }
+      ground.move(player.displacement);
 			cactuses = remove!"a.horizontal_offset < -100"(cactuses);
 
       /* Draw stuff */
@@ -92,6 +95,33 @@ class Game {
       }
       window.draw(player);
 
+      window.display();
+    }
+  }
+
+  private void endscreen() {
+    const tex = window.screenshot;
+    auto s = new Sprite(tex);
+
+    bool open = true;
+    bool key_released, key_pressed;
+    if(!Keyboard.isKeyPressed(Keyboard.Key.Space) && !Keyboard.isKeyPressed(Keyboard.Key.Down)) {
+      key_released = true;
+    }
+    while(open) {
+      foreach(ev; window.events) {
+        switch(ev.type) {
+          case Event.EventType.Closed:      window.close(); open = false; break;
+          case Event.EventType.KeyReleased: key_released = true;          break;
+          case Event.EventType.KeyPressed:  key_pressed = key_released;   break;
+          default: break;
+        }
+      }
+      if(key_pressed && key_released) {
+        open = false;
+      }
+
+      window.draw(s);
       window.display();
     }
   }
@@ -106,6 +136,11 @@ class Game {
 
     button_sound = new Sound;
     button_sound.setBuffer(buffers["button"]);
+
+    hit_sound = new Sound;
+    hit_sound.setBuffer(buffers["hit"]);
+
+    cactuses.length = 0;
   }
 
   /++ Creates a Dino game instance, size refers to height of the window +/
@@ -120,36 +155,12 @@ class Game {
   void run() {
     while(window.isOpen) {
       session();
-      window.display;
+      window.display();
+      hit_sound.play();
 
-      const tex = window.screenshot;
-      auto s = new Sprite(tex);
-
-      bool endscreen = true;
-      bool key_released, key_pressed;
-      if(!Keyboard.isKeyPressed(Keyboard.Key.Space) && !Keyboard.isKeyPressed(Keyboard.Key.Down)) {
-        key_released = true;
-      }
-      while(endscreen) {
-        foreach(ev; window.events) {
-          switch(ev.type) {
-            case Event.EventType.Closed:      window.close(); endscreen = false; break;
-            case Event.EventType.KeyReleased: key_released = true;               break;
-            case Event.EventType.KeyPressed:  key_pressed = key_released;        break;
-            default: break;
-          }
-        }
-        if(key_pressed && key_released) {
-          endscreen = false;
-        }
-
-        window.draw(s);
-        window.display();
-      }
-
-
-      cactuses.length = 0;
+      endscreen();
       button_sound.play();
+
       initialize(window.size.y);
     }
   }
