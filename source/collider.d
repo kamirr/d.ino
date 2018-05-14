@@ -1,5 +1,6 @@
 module collider;
 
+import optional;
 import std.algorithm;
 import dsfml.graphics;
 
@@ -10,12 +11,43 @@ class Collider : Drawable {
   private FloatRect[] rects;
   private FloatRect bounds;
   private float initial_tex_width = 0;
+  private auto delayed_translation = optional.no!Vector2f;
+
+  private void ensure_translation() {
+    if(delayed_translation == optional.none) {
+      return;
+    }
+
+    immutable vec = delayed_translation.or(Vector2f(0, 0));
+
+    foreach(ref r; rects) {
+      r.top += vec.y;
+      r.left += vec.x;
+    }
+    delayed_translation = optional.no!Vector2f;
+  }
+
+  /// Initializes a collider from a texture, all pixels with alpha > 127 collide
+  this(const Texture tex) {
+		bounds = FloatRect(0, 0, tex.getSize.x, tex.getSize.y);
+    auto image = tex.copyToImage;
+    foreach(x; 0..image.getSize.x)
+    foreach(y; 0..image.getSize.y) {
+      immutable color = image.getPixel(x, y);
+      if(color.a > 127 && color != Color(247, 247, 247)) {
+        rects ~= FloatRect(x, y, 1, 1);
+      }
+    }
+
+    initial_tex_width = tex.getSize.x;
+  }
 
 	override void draw(RenderTarget target, RenderStates states) {
 		if(!draw_colliders) {
 			return;
 		}
 
+    ensure_translation();
 		auto rs = new RectangleShape;
 		foreach(r; rects) {
 			rs.position(Vector2f(r.left, r.top));
@@ -31,11 +63,13 @@ class Collider : Drawable {
 	}
 
   /// Returns true if two colliders intersect
-  bool intersects(const Collider other) const {
+  bool intersects(Collider other) {
 		if(!bounds.intersects(other.bounds)) {
 			return false;
 		}
 
+    ensure_translation();
+    other.ensure_translation();
     foreach(r1; rects)
     foreach(r2; other.rects) {
       if(r1.intersects(r2)) {
@@ -46,31 +80,19 @@ class Collider : Drawable {
     return false;
   }
 
-  /// Initializes a collider from a texture, all pixels with alpha > 127 collide
-  this(const Texture tex) {
-		bounds = FloatRect(0, 0, tex.getSize.x, tex.getSize.y);
-    auto image = tex.copyToImage;
-    foreach(x; 0..image.getSize.x)
-    foreach(y; 0..image.getSize.y) {
-      if(image.getPixel(x, y).a > 127) {
-        rects ~= FloatRect(x, y, 1, 1);
-      }
-    }
-
-    initial_tex_width = tex.getSize.x;
-  }
-
   /// Initializes an empty collider
   private this() { }
 
   /// Returns a collider translated by the given vector
-  Collider translate(const Vector2f vec) const {
+  Collider translate(Vector2f vec) const {
     auto c = new Collider;
     c.rects = rects.dup;
-    foreach(ref rect; c.rects) {
-      rect.top += vec.y;
-      rect.left += vec.x;
+    if(delayed_translation == optional.none) {
+      c.delayed_translation = optional.some(vec);
+    } else {
+      c.delayed_translation = vec + delayed_translation;
     }
+
 		c.bounds = bounds;
 		c.bounds.top += vec.y;
 		c.bounds.left += vec.x;
@@ -80,7 +102,10 @@ class Collider : Drawable {
   }
 
 	/// Merges colliders
-	void merge(const Collider other) {
+	void merge(Collider other) {
+    ensure_translation();
+    other.ensure_translation();
+
 		foreach(rect; other.rects) {
 			rects ~= rect;
 		}
