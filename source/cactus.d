@@ -4,7 +4,7 @@ import dsfml.graphics;
 import collidable;
 import collider;
 
-private float asInt(Cactus.Width w) {
+private uint asInt(Cactus.Width w) {
   final switch(w) {
     case Cactus.Width.Thin:   return 1;
     case Cactus.Width.Medium: return 2;
@@ -105,10 +105,7 @@ class Cactus : Drawable, Collidable {
     width = _width;
     horizontal_offset = _horizontal_offset;
 
-		collider_not_translated = colliders[type == Type.Small ? "small_cactus" : (type == Type.Medium ? "medium_cactus" : "big_cactus")];
-		//foreach(i; 1..width.asInt) {
-		//	collider_not_translated.merge(collider_not_translated.translate(Vector2f(i * texture.getSize.x, 0)));
-		//}
+		collider_not_translated = colliders[type == Type.Small ? "small_cactus" : (type == Type.Medium ? "medium_cactus" : "big_cactus")].replicate(width.asInt);
 	}
 
   /// Moves a cactus by a given distance
