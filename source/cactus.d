@@ -27,11 +27,17 @@ static immutable medium_cactus_size = Vector2f(25, 45);
 static immutable big_cactus_size = Vector2f(24, 46);
 
 private Texture[string] textures;
+private Collider[string] colliders;
 
 static this() {
-  textures["small_cactus"]  = texFromFile("assets/cactus1.png");
+  textures["small_cactus"] = texFromFile("assets/cactus1.png");
+	colliders["small_cactus"] = new Collider(textures["small_cactus"]);
+
   textures["medium_cactus"] = texFromFile("assets/cactus2.png");
-  textures["big_cactus"]   = texFromFile("assets/cactus3.png");
+	colliders["medium_cactus"] = new Collider(textures["medium_cactus"]);
+
+  textures["big_cactus"] = texFromFile("assets/cactus3.png");
+	colliders["big_cactus"] = new Collider(textures["big_cactus"]);
 }
 
 /// Get size of a cactus of given type
@@ -42,12 +48,13 @@ Vector2f cactus_size(const Cactus c) {
     case Cactus.Type.Medium: res = medium_cactus_size; break;
     case Cactus.Type.Big:    res = big_cactus_size;    break;
   }
-  //res.x *= c.width.asInt;
   return res;
 }
 
 /// Cactus class
 class Cactus : Drawable, Collidable {
+	private Collider collider_not_translated;
+
   /// Represents type of a cactus
   enum Type {
     Small, Medium, Big
@@ -89,6 +96,7 @@ class Cactus : Drawable, Collidable {
       s.move(Vector2f(cactus_size(this).x, 0));
       window.draw(s);
     }
+		window.draw(collider_not_translated.translate(Vector2f(horizontal_offset, window_height - cactus_size(this).y)));
   }
 
   /// Constructs a cactus with given type and position
@@ -96,7 +104,12 @@ class Cactus : Drawable, Collidable {
     type = _type;
     width = _width;
     horizontal_offset = _horizontal_offset;
-  }
+
+		collider_not_translated = colliders[type == Type.Small ? "small_cactus" : (type == Type.Medium ? "medium_cactus" : "big_cactus")];
+		//foreach(i; 1..width.asInt) {
+		//	collider_not_translated.merge(collider_not_translated.translate(Vector2f(i * texture.getSize.x, 0)));
+		//}
+	}
 
   /// Moves a cactus by a given distance
   void move(float distance) {
@@ -105,8 +118,7 @@ class Cactus : Drawable, Collidable {
 
   /// Returns collider of the cactus
   Collider collider() const {
-		auto c = new Collider(texture);
-		return c.translate(Vector2f(horizontal_offset, window_height - cactus_size(this).y));
+		return collider_not_translated.translate(Vector2f(horizontal_offset, window_height - cactus_size(this).y));
   }
 }
 

@@ -19,6 +19,7 @@ float asSeconds(Duration d) {
 }
 
 private static Texture[string] textures;
+private static Collider[string] colliders;
 
 static this() {
   textures["crouch1"] = texFromFile("assets/dino_crouch1.png");
@@ -26,6 +27,8 @@ static this() {
   textures["jump"] = texFromFile("assets/dino_jump.png");
   textures["step1"] = texFromFile("assets/dino1.png");
   textures["step2"] = texFromFile("assets/dino2.png");
+
+	colliders["step1"] = new Collider(textures["step1"]);
 }
 
 /++ Class representing the dinosaur +/
@@ -93,6 +96,8 @@ class Player : Drawable, Collidable {
     rt.setTexture(texture);
 
     target.draw(rt, states);
+
+		target.draw(collider);
   }
 
   /// Attempts to jump
@@ -130,7 +135,6 @@ class Player : Drawable, Collidable {
 
   /// Returns collider of the player
   Collider collider() const {
-    auto c = new Collider(texture);
-		return c.translate(Vector2f(horizontal_offset, window_height - size.y - height));
+		return colliders["step1"].translate(Vector2f(horizontal_offset, window_height - size.y - height));
   }
 }
