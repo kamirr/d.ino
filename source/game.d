@@ -96,7 +96,7 @@ class Game {
 
       foreach(ev; window.events)
       switch(ev.type) {
-        case Event.EventType.Closed:     close = true;                break;
+        case Event.EventType.Closed:     window.close();              break;
         case Event.EventType.KeyPressed: on_key_pressed(ev.key.code); break;
         default: break;
       }
@@ -111,6 +111,7 @@ class Game {
 				cactus.move(player.displacement);
         if(player.collider.intersects(cactus.collider)) {
           close = true;
+          player.dead = true;
         }
       }
 			cactuses = remove!"a.horizontal_offset < -100"(cactuses);
