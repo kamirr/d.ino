@@ -101,18 +101,6 @@ class Player : Drawable, Collidable {
     return Vector2f(horizontal_offset, window_height - size.y - height);
   }
 
-  override void draw(RenderTarget target, RenderStates states) const {
-    auto rt = new RectangleShape;
-    rt.position(position);
-    rt.size(size);
-    rt.fillColor(Color.White);
-    rt.setTexture(texture);
-
-    target.draw(rt, states);
-
-		target.draw(collider);
-  }
-
   /// Attempts to jump
   bool jump() {
     if(height == 0) {
@@ -146,8 +134,20 @@ class Player : Drawable, Collidable {
     }
   }
 
-  /// Returns collider of the player
-  Collider collider() const {
+  /* Override methods from Drawable and Collidable */
+  override void draw(RenderTarget target, RenderStates states) const {
+    auto rt = new RectangleShape;
+    rt.position(position);
+    rt.size(size);
+    rt.fillColor(Color.White);
+    rt.setTexture(texture);
+
+    target.draw(rt, states);
+
+		target.draw(collider);
+  }
+
+  override Collider collider() const {
 		return colliders[texture_name].translate(position);
   }
 }

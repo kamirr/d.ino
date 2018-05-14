@@ -106,6 +106,12 @@ class Cactus : Drawable, Collidable {
     return Vector2f(horizontal_offset, window_height - cactus_size(this).y);
   }
 
+  /// Moves a cactus by a given distance
+  void move(float distance) {
+    horizontal_offset -= distance;
+  }
+
+  /* Override methods from Drawable and Collidable */
   override void draw(RenderTarget window, RenderStates states) const {
     RectangleShape s = new RectangleShape;
     s.position(position);
@@ -121,13 +127,7 @@ class Cactus : Drawable, Collidable {
 		window.draw(collider_not_translated.translate(position));
   }
 
-  /// Moves a cactus by a given distance
-  void move(float distance) {
-    horizontal_offset -= distance;
-  }
-
-  /// Returns collider of the cactus
-  Collider collider() const {
+  override Collider collider() const {
 		return collider_not_translated.translate(position);
   }
 }
