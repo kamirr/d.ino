@@ -83,6 +83,15 @@ class Cactus : Drawable, Collidable {
   /// Height of the game window
   float window_height;
 
+  /// Constructs a cactus with given type and position
+  this(Type _type, Width _width, float _horizontal_offset) {
+    type = _type;
+    width = _width;
+    horizontal_offset = _horizontal_offset;
+
+		collider_not_translated = getCollider(type, width);
+	}
+
   /// Texture of the cactus
   Texture texture() const {
     final switch(type) {
@@ -111,15 +120,6 @@ class Cactus : Drawable, Collidable {
     }
 		window.draw(collider_not_translated.translate(position));
   }
-
-  /// Constructs a cactus with given type and position
-  this(Type _type, Width _width, float _horizontal_offset) {
-    type = _type;
-    width = _width;
-    horizontal_offset = _horizontal_offset;
-
-		collider_not_translated = getCollider(type, width);
-	}
 
   /// Moves a cactus by a given distance
   void move(float distance) {
