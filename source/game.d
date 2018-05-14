@@ -10,6 +10,7 @@ import dsfml.system;
 import dsfml.audio;
 
 import std.random;
+import std.algorithm;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
@@ -42,7 +43,7 @@ class Game {
   private RenderWindow window;
   private Player player;
   private Ground ground;
-  private Cactus[] cactuss;
+  private Cactus[] cactuses;
   private float seconds_to_next_cactus = 0;
   private StopWatch cactus_stopwatch;
 
@@ -53,7 +54,7 @@ class Game {
 
   private void cactus_generation() {
     if(cactus_stopwatch.peek.asSeconds * player.speed / 300 > seconds_to_next_cactus) {
-      cactuss ~= random_cactus_at(600, window.getSize.y);
+      cactuses ~= random_cactus_at(600, window.getSize.y);
       seconds_to_next_cactus = uniform01!float * 2 + 1;
       cactus_stopwatch.reset();
     }
@@ -105,17 +106,19 @@ class Game {
 
       player.update();
       ground.move(player.displacement);
-      foreach(cactus; cactuss) {
-        cactus.move(player.displacement);
+      foreach(i; 0..cactuses.length) {
+				auto cactus = cactuses[i];
+				cactus.move(player.displacement);
         if(player.collider.intersects(cactus.collider)) {
           close = true;
         }
       }
+			cactuses = remove!"a.horizontal_offset < -100"(cactuses);
 
       /* Draw stuff */
       window.draw(ground);
       window.draw(player);
-      foreach(ref cactus; cactuss) {
+      foreach(ref cactus; cactuses) {
         window.draw(cactus);
       }
 
