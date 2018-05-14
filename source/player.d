@@ -55,7 +55,7 @@ class Player : Drawable, Collidable {
   float window_height;
 
   /// Distance that the player has covered in the LAST FRAME
-  float displacement() { return delta_seconds * speed; }
+  float displacement() const { return dead ? 0 : delta_seconds * speed; }
 
   /// Speed at which the player moves to the right
   float speed = 450;
@@ -114,21 +114,21 @@ class Player : Drawable, Collidable {
     crouch = Keyboard.isKeyPressed(Keyboard.Key.Down) && height == 0;
 
     delta_seconds = delta_time_clock.peek.asSeconds;
-
     delta_time_clock.reset();
 
-    vert_velocity -= delta_seconds * gravity;
-    height += delta_seconds * vert_velocity;
+    if(!dead) {
+      vert_velocity -= delta_seconds * gravity;
+      height += delta_seconds * vert_velocity;
+      speed += delta_seconds * 6;
 
-    speed += delta_seconds * 6;
-
-    if(height < 0) {
-      height = 0;
-      vert_velocity = 0;
-    }
-    if(leg_swap_clock.peek.asSeconds > 0.08f) {
-      leg = !leg;
-      leg_swap_clock.reset();
+      if(height < 0) {
+        height = 0;
+        vert_velocity = 0;
+      }
+      if(leg_swap_clock.peek.asSeconds > 0.08f) {
+        leg = !leg;
+        leg_swap_clock.reset();
+      }
     }
   }
 
