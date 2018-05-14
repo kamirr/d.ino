@@ -1,5 +1,6 @@
 module cactus;
 
+import helpers : texFromFile;
 import dsfml.graphics;
 import collidable;
 import collider;
@@ -10,13 +11,6 @@ private uint asInt(Cactus.Width w) {
     case Cactus.Width.Medium: return 2;
     case Cactus.Width.Wide:   return 3;
   }
-}
-
-private Texture texFromFile(const string filename) {
-  auto res = new Texture;
-  res.loadFromFile(filename);
-  res.setRepeated(true);
-  return res;
 }
 
 /// Size of a small cactus

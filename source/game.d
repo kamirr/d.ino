@@ -3,6 +3,7 @@ module game;
 import player;
 import cactus;
 import ground;
+import helpers : asSeconds, bufFromFile, events;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -13,21 +14,6 @@ import std.random;
 import std.algorithm;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
-
-private Event[] events(RenderWindow window) {
-  Event[] res;
-  for(Event ev; window.pollEvent(ev);) {
-    res ~= ev;
-  }
-
-  return res;
-}
-
-private SoundBuffer bufFromFile(string path) {
-  auto res = new SoundBuffer;
-  res.loadFromFile(path);
-  return res;
-}
 
 private static SoundBuffer[string] buffers;
 static this() {

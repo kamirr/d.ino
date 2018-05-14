@@ -1,13 +1,7 @@
 module ground;
 
 import dsfml.graphics;
-
-private Texture texFromFile(const string filename) {
-  auto res = new Texture;
-  res.loadFromFile(filename);
-  res.setRepeated(true);
-  return res;
-}
+import helpers : texFromFile;
 
 /// Displays the ground
 class Ground : Drawable {

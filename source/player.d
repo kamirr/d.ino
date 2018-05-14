@@ -3,20 +3,10 @@ module player;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
+import helpers : asSeconds, texFromFile;
 import dsfml.graphics;
 import collidable;
 import collider;
-
-private Texture texFromFile(const string filename) {
-  auto res = new Texture;
-  res.loadFromFile(filename);
-  return res;
-}
-
-/++ Converts Duration to a number of seconds +/
-float asSeconds(Duration d) {
-  return (cast(float) d.total!"nsecs") / 1_000_000_000;
-}
 
 private static Texture[string] textures;
 private static Collider[string] colliders;
