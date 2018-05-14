@@ -3,7 +3,7 @@ module game;
 import player;
 import cactus;
 import ground;
-import helpers : asSeconds, bufFromFile, events;
+import helpers : asSeconds, bufFromFile, events, screenshot;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -58,24 +58,7 @@ class Game {
     }
   }
 
-  /++ Creates Dino game instance, size refers to height of the window +/
-  this(uint size) {
-    window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
-    window.setVerticalSyncEnabled(true);
-
-    player = new Player();
-    player.window_height = size;
-
-    cactus_stopwatch.start();
-
-    ground = new Ground();
-
-    button_sound = new Sound;
-    button_sound.setBuffer(buffers["button"]);
-  }
-
-  /++ Runs the game +/
-  void run() {
+  private void session() {
     bool close;
     while(!close) {
       window.clear(Color(247, 247, 247));
@@ -111,11 +94,55 @@ class Game {
 
       window.display();
     }
+  }
 
-    /* Wait two seconds after the game ends */
-    auto sw = new StopWatch;
-    sw.start;
-    while(sw.peek.asSeconds < 2) {}
-    window.close();
+  private void initialize(uint size) {
+    player = new Player();
+    player.window_height = size;
+
+    cactus_stopwatch.start();
+
+    ground = new Ground();
+
+    button_sound = new Sound;
+    button_sound.setBuffer(buffers["button"]);
+  }
+
+  /++ Creates a Dino game instance, size refers to height of the window +/
+  this(uint size) {
+    window = new RenderWindow(VideoMode(cast(uint) width_to_height_ratio * size, size), "dino");
+    window.setVerticalSyncEnabled(true);
+
+    initialize(size);
+  }
+
+  /++ Runs the game +/
+  void run() {
+    while(window.isOpen) {
+      session();
+      window.display;
+
+      const tex = window.screenshot;
+      auto s = new Sprite(tex);
+
+      bool endscreen = true;
+      while(endscreen) {
+        foreach(ev; window.events) {
+          switch(ev.type) {
+            case Event.EventType.Closed:     window.close(); endscreen = false; break;
+            case Event.EventType.KeyPressed: endscreen = false;                 break;
+            default: break;
+          }
+        }
+
+        window.draw(s);
+        window.display();
+      }
+
+
+      cactuses.length = 0;
+      button_sound.play();
+      initialize(window.size.y);
+    }
   }
 }
