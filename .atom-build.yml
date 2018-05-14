@@ -1,9 +1,9 @@
-cmd: dub build
+cmd: dub build --compiler=ldc
 
 targets:
   release:
-    cmd: dub build --build=release
+    cmd: dub build --build=release --compiler=ldc
   run debug:
-    cmd: dub run
+    cmd: dub run --compiler=ldc
   run release:
-    cmd: dub run --build=release
+    cmd: dub run --build=release --compiler=ldc
