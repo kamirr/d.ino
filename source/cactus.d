@@ -40,6 +40,14 @@ static this() {
 	colliders["big_cactus"] = new Collider(textures["big_cactus"]);
 }
 
+private Collider getCollider(Cactus.Type type, Cactus.Width width) {
+  final switch(type) {
+    case Cactus.Type.Big:    return colliders["big_cactus"].replicate(width.asInt);
+    case Cactus.Type.Medium: return colliders["medium_cactus"].replicate(width.asInt);
+    case Cactus.Type.Small:  return colliders["small_cactus"].replicate(width.asInt);
+  }
+}
+
 /// Get size of a cactus of given type
 Vector2f cactus_size(const Cactus c) {
   Vector2f res;
@@ -84,9 +92,14 @@ class Cactus : Drawable, Collidable {
     }
   }
 
+  /// Position of the cactus
+  Vector2f position() const {
+    return Vector2f(horizontal_offset, window_height - cactus_size(this).y);
+  }
+
   override void draw(RenderTarget window, RenderStates states) const {
     RectangleShape s = new RectangleShape;
-    s.position(Vector2f(horizontal_offset, window.getSize.y - cactus_size(this).y));
+    s.position(position);
     s.size(cactus_size(this));
     s.setTexture(texture);
     s.fillColor(Color(255, 255, 255));
@@ -96,7 +109,7 @@ class Cactus : Drawable, Collidable {
       s.move(Vector2f(cactus_size(this).x, 0));
       window.draw(s);
     }
-		window.draw(collider_not_translated.translate(Vector2f(horizontal_offset, window_height - cactus_size(this).y)));
+		window.draw(collider_not_translated.translate(position));
   }
 
   /// Constructs a cactus with given type and position
@@ -105,7 +118,7 @@ class Cactus : Drawable, Collidable {
     width = _width;
     horizontal_offset = _horizontal_offset;
 
-		collider_not_translated = colliders[type == Type.Small ? "small_cactus" : (type == Type.Medium ? "medium_cactus" : "big_cactus")].replicate(width.asInt);
+		collider_not_translated = getCollider(type, width);
 	}
 
   /// Moves a cactus by a given distance
@@ -115,7 +128,7 @@ class Cactus : Drawable, Collidable {
 
   /// Returns collider of the cactus
   Collider collider() const {
-		return collider_not_translated.translate(Vector2f(horizontal_offset, window_height - cactus_size(this).y));
+		return collider_not_translated.translate(position);
   }
 }
 
