@@ -27,12 +27,14 @@ static this() {
   textures["jump"]    = texFromFile("assets/dino_jump.png");
   textures["step1"]   = texFromFile("assets/dino1.png");
   textures["step2"]   = texFromFile("assets/dino2.png");
+  textures["dead"]    = texFromFile("assets/dead.png");
 
   colliders["crouch1"] = new Collider(textures["crouch1"]);
   colliders["crouch2"] = new Collider(textures["crouch2"]);
   colliders["jump"]    = new Collider(textures["jump"]);
   colliders["step1"]   = new Collider(textures["step1"]);
   colliders["step2"]   = new Collider(textures["step2"]);
+  colliders["dead"]   = new Collider(textures["dead"]);
 }
 
 /// Class representing the dinosaur
@@ -42,6 +44,9 @@ class Player : Drawable, Collidable {
   private float delta_seconds = 0;
   private bool crouch;
   private bool leg;
+
+  /// Dead Player has a different texture
+  bool dead;
 
   /// Distance from the left side of the window at which a player stays
   static immutable float horizontal_offset = 60;
@@ -70,6 +75,9 @@ class Player : Drawable, Collidable {
   float vert_velocity = 0;
 
   private string texture_name() const {
+    if(dead) {
+      return "dead";
+    }
     if(height > 0) {
       return "jump";
     }
