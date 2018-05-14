@@ -6,7 +6,7 @@ import dsfml.graphics;
 
 /// Represents a collider composed of multiple rectangles
 class Collider : Drawable {
-	private static draw_colliders = true;
+	private static draw_colliders = false;
 
   private FloatRect[] rects;
   private FloatRect bounds;
