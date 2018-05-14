@@ -6,7 +6,7 @@ import dsfml.graphics;
 
 /// Represents a collider composed of multiple rectangles
 class Collider : Drawable {
-	private static draw_colliders = false;
+	private static draw_colliders = true;
 
   private FloatRect[] rects;
   private FloatRect bounds;
@@ -137,7 +137,7 @@ class Collider : Drawable {
     initial_tex_width = max(initial_tex_width, other.initial_tex_width);
 	}
 
-  // Replicates a collider horizontally
+  /// Replicates a collider horizontally
   Collider replicate(uint times) const {
     Collider c = new Collider;
 
