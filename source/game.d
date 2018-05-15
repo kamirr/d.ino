@@ -83,7 +83,7 @@ class Game {
     // Remove cactuses that moved outside of the screen
     cactuses = remove!"a.horizontal_offset < -100"(cactuses);
 
-    counter.num = player.displacement_tot.to!uint;
+    counter.num = player.displacement_tot.to!uint / 100;
 
     return close;
   }
