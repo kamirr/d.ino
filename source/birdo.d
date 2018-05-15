@@ -15,9 +15,9 @@ static this() {
 
 private float toFloat(const Birdo.Level level) {
   final switch(level) {
-    case Birdo.Level.Low:  return 20;
-    case Birdo.Level.Mid:  return 40;
-    case Birdo.Level.High: return 90;
+    case Birdo.Level.Low:  return 40;
+    case Birdo.Level.Mid:  return 68;
+    case Birdo.Level.High: return 100;
   }
 }
 
@@ -53,7 +53,7 @@ class Birdo : Drawable {
 
   override void draw(RenderTarget window, RenderStates states) const {
     auto sprite = new Sprite(texture);
-    sprite.position(Vector2f(horizontal_offset, level.toFloat));
+    sprite.position(Vector2f(horizontal_offset, window.getSize.y - level.toFloat));
     window.draw(sprite, states);
   }
 }
