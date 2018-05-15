@@ -2,7 +2,6 @@ import std.datetime   : Duration;
 import dsfml.graphics : Texture, RenderWindow;
 import dsfml.system   : Vector2;
 import dsfml.window   : Event;
-import dsfml.audio    : SoundBuffer;
 
 /// Converts Duration to a number of seconds
 float asSeconds(Duration d) {
