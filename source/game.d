@@ -1,5 +1,6 @@
 module game;
 
+import counter;
 import player;
 import cactus;
 import ground;
@@ -11,6 +12,7 @@ import dsfml.window;
 import dsfml.system;
 import dsfml.audio;
 
+import std.conv;
 import std.random;
 import std.algorithm;
 import std.datetime;
@@ -32,8 +34,9 @@ class Game {
   private Player player;
   private Ground ground;
   private Cactus[] cactuses;
-  private float seconds_to_next_cactus = 0;
+  private float seconds_to_next_cactus = 3;
   private StopWatch cactus_stopwatch;
+  private Counter counter;
 
   private Sound button_sound;
   private Sound hit_sound;
@@ -80,6 +83,8 @@ class Game {
     // Remove cactuses that moved outside of the screen
     cactuses = remove!"a.horizontal_offset < -100"(cactuses);
 
+    counter.num = player.displacement_tot.to!uint;
+
     return close;
   }
 
@@ -91,6 +96,7 @@ class Game {
       window.draw(cactus);
     }
     window.draw(player);
+    window.draw(counter);
     window.display();
   }
 
@@ -155,6 +161,8 @@ class Game {
     hit_sound.setBuffer(resource_manager.get!SoundBuffer("hit"));
 
     cactuses.length = 0;
+
+    counter = new Counter;
   }
 
   /++ Creates a Dino game instance, size refers to height of the window +/
