@@ -35,6 +35,9 @@ private class ResourceManager {
   Texture get(T)(const string name) if(is(T == Texture)) {
     return textures[name];
   }
+  Collider get(T)(const string name) if(is(T == Collider)) {
+    return colliders[name];
+  }
   SoundBuffer get(T)(const string name) if(is(T == SoundBuffer)) {
     return buffers[name];
   }
