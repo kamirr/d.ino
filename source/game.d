@@ -22,6 +22,7 @@ static this() {
   assert(resource_manager.register!Texture("assets/gameover.png", "gameover"));
   assert(resource_manager.register!SoundBuffer("assets/sound_button.mp3", "button"));
   assert(resource_manager.register!SoundBuffer("assets/sound_hit.mp3", "hit"));
+  assert(resource_manager.register!SoundBuffer("assets/sound_score100.mp3", "score"));
 }
 
 /++
@@ -40,6 +41,7 @@ class Game {
 
   private Sound button_sound;
   private Sound hit_sound;
+  private Sound score_sound;
 
   /++ Width/height ratio +/
   static immutable float width_to_height_ratio = 4;
@@ -84,6 +86,9 @@ class Game {
     cactuses = remove!"a.horizontal_offset < -100"(cactuses);
 
     counter.num = player.displacement_tot.to!uint / 45;
+    if(counter.num % 100 == 0 && counter.num != 0 && score_sound.status != Sound.Status.Playing) {
+      score_sound.play();
+    }
 
     return close;
   }
@@ -159,6 +164,9 @@ class Game {
 
     hit_sound = new Sound;
     hit_sound.setBuffer(resource_manager.get!SoundBuffer("hit"));
+
+    score_sound = new Sound;
+    score_sound.setBuffer(resource_manager.get!SoundBuffer("score"));
 
     cactuses.length = 0;
 
