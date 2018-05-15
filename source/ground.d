@@ -2,7 +2,6 @@ module ground;
 
 import dsfml.graphics;
 import resourcemanager;
-import helpers : texFromFile;
 
 /// Displays the ground
 class Ground : Drawable {

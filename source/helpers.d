@@ -9,13 +9,6 @@ float asSeconds(Duration d) {
   return (cast(float) d.total!"nsecs") / 1_000_000_000;
 }
 
-/// Creates a texture and loads it from a file
-Texture texFromFile(const string filename) {
-  auto res = new Texture;
-  res.loadFromFile(filename);
-  return res;
-}
-
 /// Creates a list containing all pending events from a given window
 Event[] events(RenderWindow window) {
   Event[] res;
@@ -32,13 +25,6 @@ const(Texture) screenshot(RenderWindow window) {
   t.create(window.size.x, window.size.y);
   t.updateFromWindow(window, 0, 0);
   return t;
-}
-
-/// Creates a sound buffer and loads its contents from file
-SoundBuffer bufFromFile(string path) {
-  auto res = new SoundBuffer;
-  res.loadFromFile(path);
-  return res;
 }
 
 /// Converts a Vector2!T to Vector2!E

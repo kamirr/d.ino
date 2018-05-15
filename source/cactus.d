@@ -1,6 +1,5 @@
 module cactus;
 
-import helpers : texFromFile;
 import dsfml.graphics;
 import resourcemanager;
 import collidable;

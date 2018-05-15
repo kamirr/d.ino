@@ -3,7 +3,7 @@ module player;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
-import helpers : asSeconds, texFromFile;
+import helpers : asSeconds;
 import resourcemanager;
 import dsfml.graphics;
 import collidable;
