@@ -1,5 +1,7 @@
 module birdo;
 
+import collider;
+import collidable;
 import dsfml.graphics;
 import resourcemanager;
 import std.math : fmod;
@@ -22,7 +24,7 @@ private float toFloat(const Birdo.Level level) {
 }
 
 /// Holds the state of that prehitoric birdo
-class Birdo : Drawable {
+class Birdo : Drawable, Collidable {
   /// Represents birdo's altitude
   enum Level {
     Low, Mid, High
@@ -33,10 +35,22 @@ class Birdo : Drawable {
   private float horizontal_offset;
   private Level level;
 
+  /// Height of the window
+  float window_height;
+
+  private string texname() const {
+    immutable tex_choice = sw.peek.asSeconds.fmod(wing_flaprate) > wing_flaprate / 2;
+    return tex_choice ? "birdo1" : "birdo2";
+  }
+
   /// Returns the texture of the birdo
   const(Texture) texture() const {
-    immutable tex_choice = sw.peek.asSeconds.fmod(wing_flaprate) > wing_flaprate / 2;
-    return resource_manager.get!Texture(tex_choice ? "birdo1" : "birdo2");
+    return resource_manager.get!Texture(texname);
+  }
+
+  /// Returns position of the birdo
+  Vector2f position() const {
+    return Vector2f(horizontal_offset, window_height - level.toFloat);
   }
 
   /// Constructs a birdo from horizontal offset and level
@@ -63,7 +77,12 @@ class Birdo : Drawable {
 
   override void draw(RenderTarget window, RenderStates states) const {
     auto sprite = new Sprite(texture);
-    sprite.position(Vector2f(horizontal_offset, window.getSize.y - level.toFloat));
+    sprite.position(position);
     window.draw(sprite, states);
+    window.draw(collider);
+  }
+
+  override Collider collider() const {
+    return resource_manager.get!Collider(texname).translate(position);
   }
 }
