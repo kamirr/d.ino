@@ -2,6 +2,7 @@ module cactus;
 
 import helpers : texFromFile;
 import dsfml.graphics;
+import resourcemanager;
 import collidable;
 import collider;
 
@@ -24,21 +25,16 @@ private Texture[string] textures;
 private Collider[string] colliders;
 
 static this() {
-  textures["small_cactus"] = texFromFile("assets/cactus1.png");
-	colliders["small_cactus"] = new Collider(textures["small_cactus"]);
-
-  textures["medium_cactus"] = texFromFile("assets/cactus2.png");
-	colliders["medium_cactus"] = new Collider(textures["medium_cactus"]);
-
-  textures["big_cactus"] = texFromFile("assets/cactus3.png");
-	colliders["big_cactus"] = new Collider(textures["big_cactus"]);
+  assert(resource_manager.register!Texture("assets/cactus1.png", "small_cactus", make_collider));
+  assert(resource_manager.register!Texture("assets/cactus2.png", "medium_cactus", make_collider));
+  assert(resource_manager.register!Texture("assets/cactus3.png", "big_cactus", make_collider));
 }
 
 private Collider getCollider(Cactus.Type type, Cactus.Width width) {
   final switch(type) {
-    case Cactus.Type.Big:    return colliders["big_cactus"].replicate(width.asInt);
-    case Cactus.Type.Medium: return colliders["medium_cactus"].replicate(width.asInt);
-    case Cactus.Type.Small:  return colliders["small_cactus"].replicate(width.asInt);
+    case Cactus.Type.Big:    return resource_manager.get!Collider("big_cactus").replicate(width.asInt);
+    case Cactus.Type.Medium: return resource_manager.get!Collider("medium_cactus").replicate(width.asInt);
+    case Cactus.Type.Small:  return resource_manager.get!Collider("small_cactus").replicate(width.asInt);
   }
 }
 
@@ -89,9 +85,9 @@ class Cactus : Drawable, Collidable {
   /// Texture of the cactus
   Texture texture() const {
     final switch(type) {
-      case Type.Small:  return textures["small_cactus"];
-      case Type.Medium: return textures["medium_cactus"];
-      case Type.Big:    return textures["big_cactus"];
+      case Type.Small:  return resource_manager.get!Texture("small_cactus");
+      case Type.Medium: return resource_manager.get!Texture("medium_cactus");
+      case Type.Big:    return resource_manager.get!Texture("big_cactus");
     }
   }
 

@@ -1,19 +1,21 @@
 module ground;
 
 import dsfml.graphics;
+import resourcemanager;
 import helpers : texFromFile;
 
 /// Displays the ground
 class Ground : Drawable {
-  private static const Texture tex;
   private float offset = 0;
 
   static this() {
-    tex = texFromFile("assets/ground.png");
+    assert(resource_manager.register!Texture("assets/ground.png", "ground"));
   }
 
   /// Move the ground by a given distance
   void move(float distance) {
+    const tex = resource_manager.get!Texture("ground");
+
     offset += distance;
     while(offset > tex.getSize.x) {
       offset -= tex.getSize.x;
@@ -21,6 +23,8 @@ class Ground : Drawable {
   }
 
   override void draw(RenderTarget target, RenderStates states) const {
+    const tex = resource_manager.get!Texture("ground");
+
     RectangleShape rs = new RectangleShape;
     rs.size(Vector2f(tex.getSize));
     rs.position(Vector2f(-offset, target.getSize.y - tex.getSize.y));
