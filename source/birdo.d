@@ -46,6 +46,11 @@ class Birdo : Drawable {
     sw.start();
   }
 
+  /// Moves the birdo to the left by f px
+  void move(const float f) {
+    horizontal_offset -= f;
+  }
+
   override void draw(RenderTarget window, RenderStates states) const {
     auto sprite = new Sprite(texture);
     sprite.position(Vector2f(horizontal_offset, level.toFloat));
