@@ -39,9 +39,9 @@ class Game {
   private Birdo[] birdos;
   private Cloud[] clouds;
   private Cactus[] cactuses;
-  private float seconds_to_next_birdo = 0; //To be changed later
-  private float seconds_to_next_cloud = 0;
-  private float seconds_to_next_cactus = 3;
+  private float seconds_to_next_birdo;
+  private float seconds_to_next_cloud;
+  private float seconds_to_next_cactus;
   private StopWatch birdo_stopwatch;
   private StopWatch cloud_stopwatch;
   private StopWatch cactus_stopwatch;
@@ -57,6 +57,7 @@ class Game {
   private void birdo_generation() {
     if(birdo_stopwatch.peek.asSeconds > seconds_to_next_birdo) {
       birdos ~= new Birdo(window.getSize.x, Birdo.random_level);
+      birdos[birdos.length - 1].window_height = window.getSize.y;
       seconds_to_next_birdo = uniform01!float * 12 + 1;
       birdo_stopwatch.reset();
 
@@ -107,6 +108,12 @@ class Game {
 
     foreach(cactus; cactuses) {
       if(player.collider.intersects(cactus.collider)) {
+        close = true;
+        player.dead = true;
+      }
+    }
+    foreach(birdo; birdos) {
+      if(player.collider.intersects(birdo.collider)) {
         close = true;
         player.dead = true;
       }
@@ -227,6 +234,10 @@ class Game {
     birdos.length = 0;
 
     counter = new Counter;
+
+    seconds_to_next_birdo = 30;
+    seconds_to_next_cloud = 0;
+    seconds_to_next_cactus = 3;
   }
 
   /++ Creates a Dino game instance, size refers to height of the window +/
