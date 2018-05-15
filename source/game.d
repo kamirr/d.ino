@@ -3,7 +3,7 @@ module game;
 import player;
 import cactus;
 import ground;
-import helpers : asSeconds, bufFromFile, events, screenshot;
+import helpers;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -16,7 +16,11 @@ import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
 private static SoundBuffer[string] buffers;
+private static Texture[string] textures;
+
 static this() {
+  textures["gameover"] = texFromFile("assets/gameover.png");
+
   buffers["button"] = bufFromFile("assets/sound_button.mp3");
   buffers["hit"] = bufFromFile("assets/sound_hit.mp3");
 }
@@ -67,8 +71,8 @@ class Game {
 
       foreach(ev; window.events)
       switch(ev.type) {
-        case Event.EventType.Closed:     window.close();              break;
-        case Event.EventType.KeyPressed: on_key_pressed(ev.key.code); break;
+        case Event.EventType.Closed:     window.close(); close = true; break;
+        case Event.EventType.KeyPressed: on_key_pressed(ev.key.code);  break;
         default: break;
       }
 
@@ -101,13 +105,16 @@ class Game {
 
   private void endscreen() {
     const tex = window.screenshot;
-    auto s = new Sprite(tex);
+    auto screenshot = new Sprite(tex);
+    auto gameover_sprite = new Sprite(textures["gameover"]);
+    gameover_sprite.position(window.getSize.changeType!float / 2 - textures["gameover"].getSize.changeType!float / 2);
 
     bool open = true;
     bool key_released, key_pressed;
     if(!Keyboard.isKeyPressed(Keyboard.Key.Space) && !Keyboard.isKeyPressed(Keyboard.Key.Down)) {
       key_released = true;
     }
+
     while(open) {
       foreach(ev; window.events) {
         switch(ev.type) {
@@ -121,7 +128,8 @@ class Game {
         open = false;
       }
 
-      window.draw(s);
+      window.draw(screenshot);
+      window.draw(gameover_sprite);
       window.display();
     }
   }
@@ -157,6 +165,10 @@ class Game {
       session();
       window.display();
       hit_sound.play();
+
+      if(!window.isOpen) {
+        break;
+      }
 
       endscreen();
       button_sound.play();

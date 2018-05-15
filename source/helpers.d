@@ -1,5 +1,6 @@
 import std.datetime   : Duration;
 import dsfml.graphics : Texture, RenderWindow;
+import dsfml.system   : Vector2;
 import dsfml.window   : Event;
 import dsfml.audio    : SoundBuffer;
 
@@ -38,4 +39,9 @@ SoundBuffer bufFromFile(string path) {
   auto res = new SoundBuffer;
   res.loadFromFile(path);
   return res;
+}
+
+/// Converts a Vector2!T to Vector2!E
+Vector2!E changeType(E, T)(Vector2!T vec) {
+  return Vector2!E(vec.x, vec.y);
 }
