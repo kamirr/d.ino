@@ -17,7 +17,7 @@ private class ResourceManager {
 
     textures[name] = newtex;
     if(generate_collider) {
-      colliders[path] = new Collider(newtex);
+      colliders[name] = new Collider(newtex);
     }
 
     return true;
