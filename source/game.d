@@ -4,6 +4,7 @@ import player;
 import cactus;
 import ground;
 import helpers;
+import resourcemanager;
 
 import dsfml.graphics;
 import dsfml.window;
@@ -15,14 +16,10 @@ import std.algorithm;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
-private static SoundBuffer[string] buffers;
-private static Texture[string] textures;
-
 static this() {
-  textures["gameover"] = texFromFile("assets/gameover.png");
-
-  buffers["button"] = bufFromFile("assets/sound_button.mp3");
-  buffers["hit"] = bufFromFile("assets/sound_hit.mp3");
+  assert(resource_manager.register!Texture("assets/gameover.png", "gameover"));
+  assert(resource_manager.register!SoundBuffer("assets/sound_button.mp3", "button"));
+  assert(resource_manager.register!SoundBuffer("assets/sound_hit.mp3", "hit"));
 }
 
 /++
@@ -115,8 +112,8 @@ class Game {
   private void endscreen() {
     const tex = window.screenshot;
     auto screenshot = new Sprite(tex);
-    auto gameover_sprite = new Sprite(textures["gameover"]);
-    gameover_sprite.position((window.middle - textures["gameover"].middle).changeType!float);
+    auto gameover_sprite = new Sprite(resource_manager.get!Texture("gameover"));
+    gameover_sprite.position((window.middle - resource_manager.get!Texture("gameover").middle).changeType!float);
 
     bool open = true;
     bool key_released, key_pressed;
@@ -152,10 +149,10 @@ class Game {
     ground = new Ground();
 
     button_sound = new Sound;
-    button_sound.setBuffer(buffers["button"]);
+    button_sound.setBuffer(resource_manager.get!SoundBuffer("button"));
 
     hit_sound = new Sound;
-    hit_sound.setBuffer(buffers["hit"]);
+    hit_sound.setBuffer(resource_manager.get!SoundBuffer("hit"));
 
     cactuses.length = 0;
   }
