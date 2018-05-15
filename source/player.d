@@ -40,11 +40,14 @@ class Player : Drawable, Collidable {
 
   /// Initial vertical speed immediately after jumping
   static immutable float initial_jump_speed = 750;
-  /// Gravitational acceleratio
-  static immutable float gravity = 3000;
+  /// Gravitational acceleration
+  static immutable float gravity_acc = 3000;
 
   /// Height of the window in which player resides
   float window_height;
+
+  /// Actual downards acceleration
+  float gravity() const { return gravity_acc * (Keyboard.isKeyPressed(Keyboard.Key.Down) ? 3 : 1); }
 
   /// Distance that the player has covered in the LAST FRAME
   float displacement() const { return dead ? 0 : delta_seconds * speed; }
