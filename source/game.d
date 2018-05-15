@@ -1,10 +1,11 @@
 module game;
 
 import cloud;
-import counter;
+import birdo;
 import player;
 import cactus;
 import ground;
+import counter;
 import helpers;
 import resourcemanager;
 
@@ -35,10 +36,13 @@ class Game {
   private RenderWindow window;
   private Player player;
   private Ground ground;
+  private Birdo[] birdos;
   private Cloud[] clouds;
   private Cactus[] cactuses;
+  private float seconds_to_next_birdo = 0; //To be changed later
   private float seconds_to_next_cloud = 0;
   private float seconds_to_next_cactus = 3;
+  private StopWatch birdo_stopwatch;
   private StopWatch cloud_stopwatch;
   private StopWatch cactus_stopwatch;
   private Counter counter;
@@ -50,11 +54,27 @@ class Game {
   /++ Width/height ratio +/
   static immutable float width_to_height_ratio = 4;
 
+  private void birdo_generation() {
+    if(birdo_stopwatch.peek.asSeconds > seconds_to_next_birdo) {
+      birdos ~= new Birdo(window.getSize.x, Birdo.random_level);
+      seconds_to_next_birdo = uniform01!float * 12 + 1;
+      birdo_stopwatch.reset();
+
+      if(seconds_to_next_cactus < 2) {
+        seconds_to_next_cactus += 2;
+      }
+    }
+  }
+
   private void cactus_generation() {
     if(cactus_stopwatch.peek.asSeconds > seconds_to_next_cactus) {
       cactuses ~= random_cactus_at(600, window.getSize.y);
       seconds_to_next_cactus = uniform01!float * 1.5 + .5;
       cactus_stopwatch.reset();
+
+      if(seconds_to_next_birdo < 2) {
+        seconds_to_next_birdo += 2;
+      }
     }
   }
 
@@ -81,8 +101,9 @@ class Game {
   private bool update_simulation() {
     bool close;
 
-    cactus_generation();
+    birdo_generation();
     cloud_generation();
+    cactus_generation();
 
     foreach(cactus; cactuses) {
       if(player.collider.intersects(cactus.collider)) {
@@ -95,10 +116,14 @@ class Game {
     foreach(cactus; cactuses) {
       cactus.move(player.displacement);
     }
+    foreach(birdo; birdos) {
+      birdo.move(player.displacement);
+    }
     foreach(cloud; clouds) {
       cloud.move(player.displacement / 12);
     }
     ground.move(player.displacement);
+
     // Remove cactuses that moved outside of the screen
     cactuses = remove!"a.horizontal_offset < -100"(cactuses);
 
@@ -120,6 +145,9 @@ class Game {
     }
     foreach(cloud; clouds) {
       window.draw(cloud);
+    }
+    foreach(birdo; birdos) {
+      window.draw(birdo);
     }
 
     window.draw(player);
@@ -182,6 +210,7 @@ class Game {
 
     cactus_stopwatch.start();
     cloud_stopwatch.start();
+    birdo_stopwatch.start();
 
     ground = new Ground();
 
@@ -195,6 +224,7 @@ class Game {
     score_sound.setBuffer(resource_manager.get!SoundBuffer("score"));
 
     cactuses.length = 0;
+    birdos.length = 0;
 
     counter = new Counter;
   }
