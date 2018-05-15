@@ -64,11 +64,42 @@ class Game {
     }
   }
 
+  private bool update_simulation() {
+    bool close;
+
+    cactus_generation();
+    foreach(cactus; cactuses) {
+      if(player.collider.intersects(cactus.collider)) {
+        close = true;
+        player.dead = true;
+      }
+    }
+
+    player.update();
+    foreach(cactus; cactuses) {
+      cactus.move(player.displacement);
+    }
+    ground.move(player.displacement);
+    // Remove cactuses that moved outside of the screen
+    cactuses = remove!"a.horizontal_offset < -100"(cactuses);
+
+    return close;
+  }
+
+  private void draw_objects() {
+    window.clear(Color(247, 247, 247));
+
+    window.draw(ground);
+    foreach(ref cactus; cactuses) {
+      window.draw(cactus);
+    }
+    window.draw(player);
+    window.display();
+  }
+
   private void session() {
     bool close;
     while(!close) {
-      window.clear(Color(247, 247, 247));
-
       foreach(ev; window.events)
       switch(ev.type) {
         case Event.EventType.Closed:     window.close(); close = true; break;
@@ -76,30 +107,8 @@ class Game {
         default: break;
       }
 
-      /* Update simulation */
-      cactus_generation();
-      foreach(cactus; cactuses) {
-        if(player.collider.intersects(cactus.collider)) {
-          close = true;
-          player.dead = true;
-        }
-      }
-
-      player.update();
-      foreach(cactus; cactuses) {
-        cactus.move(player.displacement);
-      }
-      ground.move(player.displacement);
-			cactuses = remove!"a.horizontal_offset < -100"(cactuses);
-
-      /* Draw stuff */
-      window.draw(ground);
-      foreach(ref cactus; cactuses) {
-        window.draw(cactus);
-      }
-      window.draw(player);
-
-      window.display();
+      close = update_simulation();
+      draw_objects();
     }
   }
 
