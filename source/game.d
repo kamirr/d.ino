@@ -127,9 +127,12 @@ class Game {
     gameover_sprite.position((window.middle - resource_manager.get!Texture("gameover").middle).changeType!float);
 
     bool open = true;
-    bool key_released, key_pressed;
-    if(!Keyboard.isKeyPressed(Keyboard.Key.Space) && !Keyboard.isKeyPressed(Keyboard.Key.Down)) {
-      key_released = true;
+    bool key_released = true, key_pressed;
+
+    import std.traits : EnumMembers;
+    foreach(key; EnumMembers!(Keyboard.Key))
+    if(Keyboard.isKeyPressed(key)) {
+      key_released = false;
     }
 
     while(open) {
