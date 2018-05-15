@@ -32,13 +32,13 @@ private class ResourceManager {
     return true;
   }
 
-  const(Texture) get(T)(const string name) if(is(T == Texture)) {
+  const(Texture) get(T)(const string name) const if(is(T == Texture)) {
     return textures[name];
   }
-  const(Collider) get(T)(const string name) if(is(T == Collider)) {
+  const(Collider) get(T)(const string name) const if(is(T == Collider)) {
     return colliders[name];
   }
-  const(SoundBuffer) get(T)(const string name) if(is(T == SoundBuffer)) {
+  const(SoundBuffer) get(T)(const string name) const if(is(T == SoundBuffer)) {
     return buffers[name];
   }
 }
