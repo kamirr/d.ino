@@ -107,7 +107,7 @@ class Game {
     const tex = window.screenshot;
     auto screenshot = new Sprite(tex);
     auto gameover_sprite = new Sprite(textures["gameover"]);
-    gameover_sprite.position(window.getSize.changeType!float / 2 - textures["gameover"].getSize.changeType!float / 2);
+    gameover_sprite.position((window.middle - textures["gameover"].middle).changeType!float);
 
     bool open = true;
     bool key_released, key_pressed;
