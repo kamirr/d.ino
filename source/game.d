@@ -1,5 +1,6 @@
 module game;
 
+import cloud;
 import counter;
 import player;
 import cactus;
@@ -34,8 +35,11 @@ class Game {
   private RenderWindow window;
   private Player player;
   private Ground ground;
+  private Cloud[] clouds;
   private Cactus[] cactuses;
+  private float seconds_to_next_cloud = 0;
   private float seconds_to_next_cactus = 3;
+  private StopWatch cloud_stopwatch;
   private StopWatch cactus_stopwatch;
   private Counter counter;
 
@@ -51,6 +55,14 @@ class Game {
       cactuses ~= random_cactus_at(600, window.getSize.y);
       seconds_to_next_cactus = uniform01!float * 1.5 + .5;
       cactus_stopwatch.reset();
+    }
+  }
+
+  private void cloud_generation() {
+    if(cloud_stopwatch.peek.asSeconds > seconds_to_next_cloud) {
+      clouds ~= new Cloud(window.getSize.x + 100, uniform01!float * 50 + 20);
+      seconds_to_next_cloud = uniform01!float * 8 + 1;
+      cloud_stopwatch.reset();
     }
   }
 
@@ -70,6 +82,8 @@ class Game {
     bool close;
 
     cactus_generation();
+    cloud_generation();
+
     foreach(cactus; cactuses) {
       if(player.collider.intersects(cactus.collider)) {
         close = true;
@@ -80,6 +94,9 @@ class Game {
     player.update();
     foreach(cactus; cactuses) {
       cactus.move(player.displacement);
+    }
+    foreach(cloud; clouds) {
+      cloud.move(player.displacement / 12);
     }
     ground.move(player.displacement);
     // Remove cactuses that moved outside of the screen
@@ -97,9 +114,14 @@ class Game {
     window.clear(Color(247, 247, 247));
 
     window.draw(ground);
-    foreach(ref cactus; cactuses) {
+
+    foreach(cactus; cactuses) {
       window.draw(cactus);
     }
+    foreach(cloud; clouds) {
+      window.draw(cloud);
+    }
+
     window.draw(player);
     window.draw(counter);
     window.display();
@@ -159,6 +181,7 @@ class Game {
     player.window_height = size;
 
     cactus_stopwatch.start();
+    cloud_stopwatch.start();
 
     ground = new Ground();
 
