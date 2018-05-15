@@ -28,7 +28,7 @@ class Birdo : Drawable {
     Low, Mid, High
   }
 
-  private immutable wing_flaprate = 1.;
+  private immutable wing_flaprate = .5;
   private StopWatch sw;
   private float horizontal_offset;
   private Level level;
