@@ -32,7 +32,7 @@ private class ResourceManager {
     return true;
   }
 
-  Texture get(T)(const string name) if(is(T == Texture)) {
+  const(Texture) get(T)(const string name) if(is(T == Texture)) {
     return textures[name];
   }
   Collider get(T)(const string name) if(is(T == Collider)) {

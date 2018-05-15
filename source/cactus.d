@@ -20,9 +20,6 @@ static immutable medium_cactus_size = Vector2f(25, 45);
 /// Size of a big cactus
 static immutable big_cactus_size = Vector2f(24, 46);
 
-private Texture[string] textures;
-private Collider[string] colliders;
-
 static this() {
   assert(resource_manager.register!Texture("assets/cactus1.png", "small_cactus", make_collider));
   assert(resource_manager.register!Texture("assets/cactus2.png", "medium_cactus", make_collider));
@@ -82,7 +79,7 @@ class Cactus : Drawable, Collidable {
 	}
 
   /// Texture of the cactus
-  Texture texture() const {
+  const(Texture) texture() const {
     final switch(type) {
       case Type.Small:  return resource_manager.get!Texture("small_cactus");
       case Type.Medium: return resource_manager.get!Texture("medium_cactus");
