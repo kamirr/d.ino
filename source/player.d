@@ -4,27 +4,18 @@ import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
 import helpers : asSeconds, texFromFile;
+import resourcemanager;
 import dsfml.graphics;
 import collidable;
 import collider;
 
-private static Texture[string] textures;
-private static Collider[string] colliders;
-
 static this() {
-  textures["crouch1"] = texFromFile("assets/dino_crouch1.png");
-  textures["crouch2"] = texFromFile("assets/dino_crouch2.png");
-  textures["jump"]    = texFromFile("assets/dino_jump.png");
-  textures["step1"]   = texFromFile("assets/dino1.png");
-  textures["step2"]   = texFromFile("assets/dino2.png");
-  textures["dead"]    = texFromFile("assets/dead.png");
-
-  colliders["crouch1"] = new Collider(textures["crouch1"]);
-  colliders["crouch2"] = new Collider(textures["crouch2"]);
-  colliders["jump"]    = new Collider(textures["jump"]);
-  colliders["step1"]   = new Collider(textures["step1"]);
-  colliders["step2"]   = new Collider(textures["step2"]);
-  colliders["dead"]    = new Collider(textures["dead"]);
+  assert(resource_manager.register!Texture("assets/dino_crouch1.png", "crouch1", make_collider));
+  assert(resource_manager.register!Texture("assets/dino_crouch2.png", "crouch2", make_collider));
+  assert(resource_manager.register!Texture("assets/dino_jump.png", "jump", make_collider));
+  assert(resource_manager.register!Texture("assets/dino1.png", "step1", make_collider));
+  assert(resource_manager.register!Texture("assets/dino2.png", "step2", make_collider));
+  assert(resource_manager.register!Texture("assets/dead.png", "dead", make_collider));
 }
 
 /// Class representing the dinosaur
@@ -91,7 +82,7 @@ class Player : Drawable, Collidable {
 
   /// Current texture
   const(Texture) texture() const {
-    return textures[texture_name];
+    return resource_manager.get!Texture(texture_name);
   }
 
   /// Position of the player
@@ -146,6 +137,6 @@ class Player : Drawable, Collidable {
   }
 
   override Collider collider() const {
-		return colliders[texture_name].translate(position);
+		return resource_manager.get!Collider(texture_name).translate(position);
   }
 }
