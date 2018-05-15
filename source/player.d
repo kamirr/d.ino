@@ -22,6 +22,7 @@ static this() {
 class Player : Drawable, Collidable {
   private StopWatch delta_time_clock;
   private StopWatch leg_swap_clock;
+  private float total_displacement = 0;
   private float delta_seconds = 0;
   private bool crouch;
   private bool leg;
@@ -47,6 +48,9 @@ class Player : Drawable, Collidable {
 
   /// Distance that the player has covered in the LAST FRAME
   float displacement() const { return dead ? 0 : delta_seconds * speed; }
+
+  /// Returns the total displacement
+  float displacement_tot() const { return total_displacement; }
 
   /// Speed at which the player moves to the right
   float speed = 450;
@@ -121,6 +125,8 @@ class Player : Drawable, Collidable {
         leg_swap_clock.reset();
       }
     }
+
+    total_displacement += displacement;
   }
 
   /* Override methods from Drawable and Collidable */
