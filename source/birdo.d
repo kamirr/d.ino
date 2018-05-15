@@ -51,6 +51,16 @@ class Birdo : Drawable {
     horizontal_offset -= f;
   }
 
+  /// Randomizes Birdo.Level
+  static Birdo.Level random_level() {
+    import std.random : uniform;
+    final switch(uniform!uint % 3) {
+      case 0: return Birdo.Level.Low;
+      case 1: return Birdo.Level.Mid;
+      case 2: return Birdo.Level.High;
+    }
+  }
+
   override void draw(RenderTarget window, RenderStates states) const {
     auto sprite = new Sprite(texture);
     sprite.position(Vector2f(horizontal_offset, window.getSize.y - level.toFloat));
