@@ -32,12 +32,7 @@ Vector2!E changeType(E, T)(Vector2!T vec) {
   return Vector2!E(vec.x, vec.y);
 }
 
-/// Returns size of the window halved
-Vector2!uint middle(const RenderWindow window) {
-  return window.getSize / 2;
-}
-
-/// Returns size of the texture halved
-Vector2!uint middle(const Texture tex) {
-  return tex.getSize / 2;
+/// Returns size of an object halved
+Vector2!uint middle(T)(const T object) {
+  return object.getSize / 2;
 }
