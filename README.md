@@ -1,3 +1,5 @@
+<img src="https://github.com/KoczurekK/d.ino/raw/master/logo.png" width="256">
+
 # D.ino
 Ever wanted to play that dino game from Google Chrome while still being connected to internet? Well, that's why websites like chromedino.com exist. I was just really bored and learning D, there wasn't actually any point in writing it, but hey, why not?
 
