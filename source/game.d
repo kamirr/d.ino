@@ -61,8 +61,8 @@ class Game {
       seconds_to_next_birdo = uniform01!float * 12 + 1;
       birdo_stopwatch.reset();
 
-      if(seconds_to_next_cactus - cactus_stopwatch.peek.asSeconds < 1) {
-        seconds_to_next_cactus += 1;
+      if(seconds_to_next_cactus - cactus_stopwatch.peek.asSeconds < .6) {
+        seconds_to_next_cactus += .6;
       }
     }
   }
@@ -73,8 +73,8 @@ class Game {
       seconds_to_next_cactus = uniform01!float * 1.5 + .5;
       cactus_stopwatch.reset();
 
-      if(seconds_to_next_birdo - birdo_stopwatch.peek.asSeconds < 1) {
-        seconds_to_next_birdo += 1;
+      if(seconds_to_next_birdo - birdo_stopwatch.peek.asSeconds < .6) {
+        seconds_to_next_birdo += .6;
       }
     }
   }
