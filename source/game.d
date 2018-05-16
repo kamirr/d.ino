@@ -58,7 +58,7 @@ class Game {
     if(birdo_stopwatch.peek.asSeconds > seconds_to_next_birdo) {
       birdos ~= new Birdo(window.getSize.x, Birdo.random_level);
       birdos[$-1].window_height = window.getSize.y;
-      seconds_to_next_birdo = uniform01!float * 12 + 1;
+      seconds_to_next_birdo = uniform01!float * 8 + 1;
       birdo_stopwatch.reset();
 
       if(seconds_to_next_cactus - cactus_stopwatch.peek.asSeconds < .6) {
@@ -70,7 +70,7 @@ class Game {
   private void cactus_generation() {
     if(cactus_stopwatch.peek.asSeconds > seconds_to_next_cactus) {
       cactuses ~= random_cactus_at(600, window.getSize.y);
-      seconds_to_next_cactus = uniform01!float * 1.5 + .5;
+      seconds_to_next_cactus = uniform01!float * 1 + .6;
       cactus_stopwatch.reset();
 
       if(seconds_to_next_birdo - birdo_stopwatch.peek.asSeconds < .6) {
