@@ -19,7 +19,7 @@ private float toFloat(const Birdo.Level level) {
   final switch(level) {
     case Birdo.Level.Low:  return 40;
     case Birdo.Level.Mid:  return 68;
-    case Birdo.Level.High: return 100;
+    case Birdo.Level.High: return 130;
   }
 }
 
