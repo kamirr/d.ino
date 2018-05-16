@@ -1,5 +1,6 @@
 module player;
 
+import std.math;
 import std.datetime;
 import std.datetime.stopwatch : StopWatch;
 
@@ -123,7 +124,7 @@ class Player : Drawable, Collidable {
         height = 0;
         vert_velocity = 0;
       }
-      if(leg_swap_clock.peek.asSeconds > 0.08f) {
+      if(leg_swap_clock.peek.asSeconds * sqrt(speed / 450) > 0.1f) {
         leg = !leg;
         leg_swap_clock.reset();
       }
