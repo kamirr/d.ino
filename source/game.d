@@ -57,7 +57,7 @@ class Game {
   private void birdo_generation() {
     if(birdo_stopwatch.peek.asSeconds > seconds_to_next_birdo) {
       birdos ~= new Birdo(window.getSize.x, Birdo.random_level);
-      birdos[birdos.length - 1].window_height = window.getSize.y;
+      birdos[$-1].window_height = window.getSize.y;
       seconds_to_next_birdo = uniform01!float * 12 + 1;
       birdo_stopwatch.reset();
 
