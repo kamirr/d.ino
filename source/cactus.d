@@ -29,7 +29,7 @@ static this() {
   }
 }
 
-private const(Collider) getCollider(const uint cactus_id) {
+private const(Collider) get_collider(const uint cactus_id) {
   return resource_manager.get!Collider(cactus_id.name);
 }
 
@@ -54,7 +54,7 @@ class Cactus : Drawable, Collidable {
     cactus_id = _cactus_id;
     horizontal_offset = _horizontal_offset;
 
-		collider_not_translated = getCollider(cactus_id);
+		collider_not_translated = get_collider(cactus_id);
 	}
 
   /// Texture of the cactus
