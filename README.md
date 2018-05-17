@@ -9,5 +9,9 @@ Literally none. I may make some kind of a pathetic, badly-balanced RPG out of it
 # Submissions
 Feel free to open pull requests etc., if your formatting isn't an ungodly abomination and I like it, it'll probably be merged.
 
-# Building
-Make sure that you have DSFMLC installed, then you simply build it with dub. Like that: `dub build`. You may need to pass some additional flags to the linker if you're using Windows. Or not, who knows.
+# Usage
+- Fetch d.ino: `dub fetch dino`
+- Go to the install path, on linux it's `.dub/packages/dino-x.x.x/dino/`
+- Exectute `dino` file.
+
+Support for `dub run dino` is missing because d.ino uses a relative path to access its assets. Something will be done with it soon. Maybe.
